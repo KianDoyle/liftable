@@ -1,0 +1,43 @@
+<div th:fragment="search">
+  <div th:if="${lifterList} != null" class="container">
+    <div class="results-card">
+      <h3 class="text-center">Results</h3>
+      <ul class="list-group mt-3">
+        <li class="list-group-item" th:each="lifter : ${lifterList}">
+          <a th:text="${lifter.getName()}" th:href="${lifter.getLink()}"></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div th:if="${lifter} != null" class="container" th:fragment="lifter-info">
+  <div class="results-card">
+    <h1>Lifter Information</h1>
+    <h2 th:text="${lifter.name() + ' ' + lifter.sex()}"></h2>
+    <h3>Personal Bests</h3>
+
+    <table class="table table-dark table-striped">
+      <thead>
+      <tr>
+        <th>Equip</th>
+        <th>Squat</th>
+        <th>Bench</th>
+        <th>Deadlift</th>
+        <th>Total</th>
+        <th>GLP</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td class="equip" th:text="${lifter.equip()}"></td>
+        <td class="squat" th:text="${lifter.squat()}"></td>
+        <td class="bench" th:text="${lifter.bench()}"></td>
+        <td class="deadlift" th:text="${lifter.deadlift()}"></td>
+        <td class="total" th:text="${lifter.total()}"></td>
+        <td class="glp" th:text="${lifter.glp()}"></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
