@@ -1,0 +1,61 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+*.properties
+# Ignore Terraform files and directories
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+main.tf
+.terraform.lock.hcl
+
+# Ignore override files
+override.tf
+override.tf.json
+
+# Ignore CLI configuration files
+*.tfvars
+*.tfvars.json
+
+# Ignore local Terraform module directories
+modules/
+
+# Ignore crash logs
+crash.log
+
+# Ignore plan files
+*.tfplan
+
+# Ignore Terraform workspace data
+*.tfstate.d/
