@@ -38,6 +38,7 @@ public class WebController {
     @GetMapping("/lifter/{name}")
     public String getLifterData(@PathVariable String name, Model model) throws Exception {
         model.addAttribute("lifter", openPowerliftingService.fetchLifterData(name));
+//        model.addAttribute("lifterJson", openPowerliftingService.getLifterJson(name));
         return "index";
     }
 

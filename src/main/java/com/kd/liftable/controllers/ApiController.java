@@ -1,5 +1,6 @@
 package com.kd.liftable.controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.kd.liftable.services.OpenPowerliftingService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +17,8 @@ public class ApiController {
     }
 
     @GetMapping("/{name}")
-    public String getLifterData(@PathVariable String name) throws Exception {
-        return openPowerliftingService.fetchLifterDataRaw(name);
+    public JsonNode getLifterData(@PathVariable String name) throws Exception {
+//        return openPowerliftingService.fetchLifterDataRaw(name);
+        return openPowerliftingService.getLifterJson(name);
     }
 }
