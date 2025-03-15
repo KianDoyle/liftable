@@ -1,16 +1,3 @@
-<div th:fragment="search">
-  <div th:if="${lifterList} != null" class="container">
-    <div class="results-card">
-      <h3 class="text-center">Results</h3>
-      <ul class="list-group mt-3">
-        <li class="list-group-item" th:each="lifter : ${lifterList}">
-          <a th:text="${lifter.getName()}" th:href="${lifter.getLink()}"></a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</div>
-
 <div th:if="${lifter} != null" class="container d-flex justify-content-center" th:fragment="lifter-info">
   <div class="results-card w-50">
     <h1>Lifter Information</h1>
