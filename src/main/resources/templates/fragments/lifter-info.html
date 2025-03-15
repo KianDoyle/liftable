@@ -11,13 +11,13 @@
   </div>
 </div>
 
-<div th:if="${lifter} != null" class="container" th:fragment="lifter-info">
-  <div class="results-card">
+<div th:if="${lifter} != null" class="container d-flex justify-content-center" th:fragment="lifter-info">
+  <div class="results-card w-50">
     <h1>Lifter Information</h1>
     <h2 th:text="${lifter.name() + ' ' + lifter.sex()}"></h2>
     <h3>Personal Bests</h3>
 
-    <table class="table table-dark table-striped">
+    <table class="table table-dark table-striped m-0">
       <thead>
       <tr>
         <th>Equip</th>
@@ -30,12 +30,12 @@
       </thead>
       <tbody>
       <tr>
-        <td class="equip" th:text="${lifter.equip()}"></td>
-        <td class="squat" th:text="${lifter.squat()}"></td>
-        <td class="bench" th:text="${lifter.bench()}"></td>
-        <td class="deadlift" th:text="${lifter.deadlift()}"></td>
-        <td class="total" th:text="${lifter.total()}"></td>
-        <td class="glp" th:text="${lifter.glp()}"></td>
+        <td th:text="${lifter.equip()}"></td>
+        <td th:text="${lifter.squat()}"></td>
+        <td th:text="${lifter.bench()}"></td>
+        <td th:text="${lifter.deadlift()}"></td>
+        <td th:text="${lifter.total()}"></td>
+        <td th:text="${lifter.glp()}"></td>
       </tr>
       </tbody>
     </table>

@@ -1,8 +1,10 @@
 package com.kd.liftable.services;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
 import com.kd.liftable.models.Lifter;
 import com.kd.liftable.models.NameLink;
+import com.kd.liftable.models.PowerliftingRecord;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -43,6 +45,14 @@ public class OpenPowerliftingService {
         String csvData = fetchLifterDataRaw(lifterName);
         String jsonString = convertCsvToJson(csvData);
         return convertJsonStringToJsonNode(jsonString);
+    }
+
+    public ArrayList<PowerliftingRecord> getLifterRecords(String lifterName) throws Exception {
+        String csvData = fetchLifterDataRaw(lifterName);
+        String jsonString = convertCsvToJson(csvData);
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        return objectMapper.readValue(jsonString, new TypeReference<ArrayList<PowerliftingRecord>>() {});
     }
 
     private String fetchLifterDataRaw(String lifterName) throws Exception {

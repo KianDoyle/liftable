@@ -26,6 +26,7 @@ public class WebController {
     public String getHome(Model model) throws Exception {
         model.addAttribute("lifterList", null);
         model.addAttribute("lifter", null);
+        model.addAttribute("records", null);
         return "index";
     }
 
@@ -38,7 +39,7 @@ public class WebController {
     @GetMapping("/lifter/{name}")
     public String getLifterData(@PathVariable String name, Model model) throws Exception {
         model.addAttribute("lifter", openPowerliftingService.fetchLifterData(name));
-//        model.addAttribute("lifterJson", openPowerliftingService.getLifterJson(name));
+        model.addAttribute("records", openPowerliftingService.getLifterRecords(name));
         return "index";
     }
 
