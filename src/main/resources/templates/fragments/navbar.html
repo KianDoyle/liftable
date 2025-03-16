@@ -1,15 +1,24 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-</head>
-<body>
-<nav class="navbar navbar-dark" th:fragment="navbar">
-  <a class="navbar-brand" th:href="@{~/web/home}">Liftable</a>
-  <form class="d-flex search-bar" th:action="@{/web/search}" method="get">
-    <input class="form-control me-2" type="text" name="query" placeholder="Search..." required>
-    <button class="btn btn-primary" type="submit">Search</button>
-  </form>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<nav class="navbar navbar-dark fixed-top" th:fragment="navbar">
+    <div class="container-fluid">
+        <div class="row w-100 align-items-center">
+            <!-- Left side: Logo and 'Liftable' text -->
+            <div class="col-auto d-flex align-items-center">
+                <a th:href="@{~/web/home}"><img th:src="@{/Vector.png}" alt="Liftable Purple Logo"
+                                                class="logo me-2"></a>
+                <a class="navbar-brand" th:href="@{~/web/home}">LIFTABLE</a>
+                <div class="navbar-brand mx-3" style="color: #501993">I</div>
+                <a class="navbar-brand mx-3" th:href="@{~web/compare}">COMPARE</a>
+            </div>
+
+            <!-- Right side: Search form -->
+            <div class="col-auto ms-auto">
+                <form class="d-flex search-bar" th:action="@{/web/search}" method="get">
+                    <input class="form-control me-2" type="text" name="query" placeholder="Search..." required>
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </nav>
-</body>
 </html>

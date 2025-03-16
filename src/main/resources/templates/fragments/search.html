@@ -1,12 +1,14 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <div th:fragment="search">
-  <div th:if="${lifterList} != null" class="container">
-    <div class="results-card">
-      <h3 class="text-center">Results</h3>
-      <ul class="list-group mt-3">
-        <li class="list-group-item" th:each="lifter : ${lifterList}">
-          <a th:text="${lifter.getName()}" th:href="${lifter.getLink()}"></a>
-        </li>
-      </ul>
+    <div th:if="${lifterList} != null" class="container d-flex justify-content-center w-100">
+        <div class="results-card w-25 text-center">
+            <h3 class="text-center">Results</h3>
+            <ul class="list-group mt-3">
+                <li class="list-group-item" th:each="lifter : ${lifterList}">
+                    <a th:text="${lifter.getName()}" th:href="${lifter.getLink()}" style="cursor: pointer;"></a>
+                </li>
+            </ul>
+        </div>
     </div>
-  </div>
 </div>
+</html>
