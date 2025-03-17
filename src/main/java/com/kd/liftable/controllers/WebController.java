@@ -28,11 +28,13 @@ public class WebController {
         model.addAttribute("lifter", null);
         model.addAttribute("records", null);
         model.addAttribute("showdown", true);
+        model.addAttribute("regionalRankings", true);
+        model.addAttribute("leaderboards", openPowerliftingService.fetchAllRegionalRankings());
         return "index";
     }
 
     @GetMapping("/search")
-    public String search(@RequestParam(name = "query", required = false) String query, Model model) {
+    public String search(@RequestParam(name = "query", required = false) String query, Model model) throws Exception {
         model.addAttribute("lifterList", openPowerliftingService.fetchLiftersDisambiguationList(query));
         model.addAttribute("showdown", false);
         return "index"; // Renders search.html
@@ -47,7 +49,7 @@ public class WebController {
     }
 
     @GetMapping("/showdownSearch")
-    public String showdownSearch(@RequestParam(name = "query", required = false) String query, Model model) {
+    public String showdownSearch(@RequestParam(name = "query", required = false) String query, Model model) throws Exception {
         model.addAttribute("lifterList", openPowerliftingService.fetchLiftersDisambiguationList(query));
         return "fragments/search :: search";
     }

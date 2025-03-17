@@ -1,30 +1,25 @@
 package com.kd.liftable.models;
 
+import lombok.Getter;
+
+@Getter
 public enum RegionMapper {
     EUROPE("europe", "epf"),
-    NORTH_AMERICA("na", "napf"),
-    SOUTH_AMERICA("sa", "fesupo"),
+    NORTH_AMERICA("north america", "napf"),
+    SOUTH_AMERICA("south america", "fesupo"),
     ASIA("asia", "asianpf"),
     AFRICA("africa", "africanpf"),
     OCEANIA("oceania", "orpf");
 
+    // Getter for region name
     private final String regionName;
+    // Getter for affiliated federation
     private final String affiliatedFederation;
 
     // Constructor to initialize the enum with region and federation
     RegionMapper(String regionName, String affiliatedFederation) {
         this.regionName = regionName;
         this.affiliatedFederation = affiliatedFederation;
-    }
-
-    // Getter for region name
-    public String getRegionName() {
-        return regionName;
-    }
-
-    // Getter for affiliated federation
-    public String getAffiliatedFederation() {
-        return affiliatedFederation;
     }
 
     // Method to get federation by region name

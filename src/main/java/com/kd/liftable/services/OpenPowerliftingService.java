@@ -2,6 +2,8 @@ package com.kd.liftable.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.kd.liftable.models.Lifter;
 import com.kd.liftable.models.NameLink;
 import com.kd.liftable.models.PowerliftingRecord;
@@ -9,6 +11,8 @@ import com.kd.liftable.models.RegionMapper;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
+
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,29 +23,20 @@ import java.util.regex.Pattern;
 @Service
 public class OpenPowerliftingService {
 
-    // Used to get records in JSON format for API
-    public JsonNode getLifterJson(String lifterName) throws Exception {
-        String csvData = fetchLifterDataRaw(lifterName);
-        String jsonString = ServiceUtils.convertCsvToJsonString(csvData);
-        return ServiceUtils.convertJsonStringToJsonNode(jsonString);
+    private final ApiPowerliftingService apiPowerliftingService;
+
+    public OpenPowerliftingService(ApiPowerliftingService apiPowerliftingService) {
+        this.apiPowerliftingService = apiPowerliftingService;
     }
 
     // Used to create record objects for thymeleaf
     public ArrayList<PowerliftingRecord> getLifterRecords(String lifterName) throws Exception {
-        String csvData = fetchLifterDataRaw(lifterName);
+        String csvData = apiPowerliftingService.fetchLifterDataRaw(lifterName);
         String jsonString = ServiceUtils.convertCsvToJsonString(csvData);
         ObjectMapper objectMapper = new ObjectMapper();
 
         return objectMapper.readValue(jsonString, new TypeReference<ArrayList<PowerliftingRecord>>() {
         });
-    }
-
-    private String fetchLifterDataRaw(String lifterName) throws Exception {
-        String url = "https://www.openipf.org/api/liftercsv/";
-        String formattedName = lifterName.strip().toLowerCase();
-        String apiUrl = url + formattedName;
-
-        return ServiceUtils.fetchResponseString(apiUrl);
     }
 
     public Lifter fetchLifterData(String lifterName) throws Exception {
@@ -65,8 +60,7 @@ public class OpenPowerliftingService {
         List<String> stats = Arrays.stream(statsElement.text().split(" ")).toList();
 
         // Create and return the lifter object
-        Lifter lifter = new Lifter(nameSex.get(0) + " " + nameSex.get(1), nameSex.get(2), stats.get(0), Float.parseFloat(stats.get(1)), Float.parseFloat(stats.get(2)), Float.parseFloat(stats.get(3)), Float.parseFloat(stats.get(4)), Float.parseFloat(stats.get(5)));
-        return lifter;
+        return new Lifter(nameSex.get(0) + " " + nameSex.get(1), nameSex.get(2), stats.get(0), Float.parseFloat(stats.get(1)), Float.parseFloat(stats.get(2)), Float.parseFloat(stats.get(3)), Float.parseFloat(stats.get(4)), Float.parseFloat(stats.get(5)));
     }
 
     public ArrayList<NameLink> fetchLiftersDisambiguationList(String lifterName) throws Exception {
@@ -91,36 +85,24 @@ public class OpenPowerliftingService {
         return lifterList;
     }
 
-    public JsonNode getRegionalRankingsJSON(String region) throws Exception {
+    public LinkedHashMap<String, ArrayList<NameLink>> fetchAllRegionalRankings() throws Exception {
+        LinkedHashMap<String, ArrayList<NameLink>> nameLinksMap = new LinkedHashMap<>();
 
-        String regionalFed = RegionMapper.getFederationByRegion(region);
+        for (RegionMapper region : RegionMapper.values()) {
+            String regionName = region.getRegionName();
+            JsonNode nameList = apiPowerliftingService.getRegionalRankingsJSON(regionName);
+            JsonNode regionArray = nameList.path(regionName);
+            ArrayList<NameLink> nameLinks = new ArrayList<>();
 
-        String url = "https://www.openipf.org/rankings/" + regionalFed;
-
-        Document doc = ServiceUtils.fetchResponseDocument(url);
-
-        // Extract the script tag containing `initial_data`
-        Element scriptTag = doc.select("script:containsData(initial_data)").first();
-
-        if (scriptTag == null) {
-            System.out.println("No matching script tag found");
-            return null;
+            for (JsonNode entry : regionArray) {
+                String lifterName = entry.get(2).asText();
+                String lifterLink = entry.get(3).asText();
+                nameLinks.add(new NameLink(lifterName, "lifter/" + lifterLink));
+            }
+            nameLinksMap.put(regionName.toUpperCase(), nameLinks);
         }
 
-        String scriptContent = scriptTag.html();
-
-        // Regex pattern to extract only the first 10 rows from "rows": [...]
-        Pattern pattern = Pattern.compile("\"rows\":\\[(\\[.*?])(?:,\\[.*?]){0,9}");
-        Matcher matcher = pattern.matcher(scriptContent);
-
-        if (!matcher.find()) {
-            System.out.println("Failed to extract the first 10 entries");
-            return null;
-        }
-
-        String jsonRowsString = "[" + matcher.group(1) + "]";
-
-        return ServiceUtils.convertJsonStringToJsonNode(jsonRowsString);
+        return nameLinksMap;
     }
 
 }
