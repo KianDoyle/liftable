@@ -110,7 +110,7 @@ Retrieves structured JSON data for a specified lifter.
 GET /api/json/region/{region}
 ```
 **Description:**
-Retrieves powerlifting rankings for a specified region - denoted by lowercase Continent 2-letter-abbreviation - in JSON format.
+Retrieves top 10 powerlifting rankings for a specified region - denoted by lowercase Continent 2-letter-abbreviation - in JSON format from 1964-Current.
 
 **Path Parameters:**
 - `region` (String) – The continent whose rankings are requested.
