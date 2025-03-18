@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.kd.liftable.models.PowerliftingRecord;
 import com.kd.liftable.models.RegionMapper;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -61,30 +62,30 @@ public class ApiPowerliftingService {
         return ServiceUtils.convertJsonStringToJsonNode(jsonRowsString);
     }
 
-    public JsonNode getRegionalRankingsJSONNameOnly(String region) throws Exception {
-        // Get the full JSON data for the region
-        JsonNode fullData = getRegionalRankingsJSON(region);
-        if (fullData == null) {
-            return null;
-        }
-
-        // Get the "europe" array from the root node
-        JsonNode regionArray = fullData.path(region);
-
-        // Create an ArrayNode to store the usernames
-        ArrayNode usernamesArray = new ArrayNode(JsonNodeFactory.instance);
-
-        // Iterate over the array in the "europe" node
-        for (JsonNode entry : regionArray) {
-            // Extract the 4th element (index 3) from each entry (the username)
-            String username = entry.get(3).asText();
-            usernamesArray.add(username);
-        }
-
-        // Create the final result in JSON format
-        ObjectNode resultNode = new ObjectNode(JsonNodeFactory.instance);
-        resultNode.set(region, usernamesArray);
-
-        return resultNode;
-    }
+//    public JsonNode getRegionalRankingsJSONNameOnly(String region) throws Exception {
+//        // Get the full JSON data for the region
+//        JsonNode fullData = getRegionalRankingsJSON(region);
+//        if (fullData == null) {
+//            return null;
+//        }
+//
+//        // Get the "europe" array from the root node
+//        JsonNode regionArray = fullData.path(region);
+//
+//        // Create an ArrayNode to store the usernames
+//        ArrayNode usernamesArray = new ArrayNode(JsonNodeFactory.instance);
+//
+//        // Iterate over the array in the "europe" node
+//        for (JsonNode entry : regionArray) {
+//            // Extract the 4th element (index 3) from each entry (the username)
+//            String username = entry.get(3).asText();
+//            usernamesArray.add(username);
+//        }
+//
+//        // Create the final result in JSON format
+//        ObjectNode resultNode = new ObjectNode(JsonNodeFactory.instance);
+//        resultNode.set(region, usernamesArray);
+//
+//        return resultNode;
+//    }
 }

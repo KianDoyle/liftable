@@ -24,9 +24,11 @@ import java.util.regex.Pattern;
 public class OpenPowerliftingService {
 
     private final ApiPowerliftingService apiPowerliftingService;
+    private final ServiceUtils serviceUtils;
 
-    public OpenPowerliftingService(ApiPowerliftingService apiPowerliftingService) {
+    public OpenPowerliftingService(ApiPowerliftingService apiPowerliftingService, ServiceUtils serviceUtils) {
         this.apiPowerliftingService = apiPowerliftingService;
+        this.serviceUtils = serviceUtils;
     }
 
     // Used to create record objects for thymeleaf
@@ -85,24 +87,23 @@ public class OpenPowerliftingService {
         return lifterList;
     }
 
-    public LinkedHashMap<String, ArrayList<NameLink>> fetchAllRegionalRankings() throws Exception {
-        LinkedHashMap<String, ArrayList<NameLink>> nameLinksMap = new LinkedHashMap<>();
+    public LinkedHashMap<String, ArrayList<PowerliftingRecord>> fetchAllRegionalRankings() throws Exception {
+        LinkedHashMap<String, ArrayList<PowerliftingRecord>> lifterLinksMap = new LinkedHashMap<>();
 
         for (RegionMapper region : RegionMapper.values()) {
             String regionName = region.getRegionName();
             JsonNode nameList = apiPowerliftingService.getRegionalRankingsJSON(regionName);
             JsonNode regionArray = nameList.path(regionName);
-            ArrayList<NameLink> nameLinks = new ArrayList<>();
+            ArrayList<PowerliftingRecord> lifterLinks = new ArrayList<>();
 
             for (JsonNode entry : regionArray) {
-                String lifterName = entry.get(2).asText();
-                String lifterLink = entry.get(3).asText();
-                nameLinks.add(new NameLink(lifterName, "lifter/" + lifterLink));
+                PowerliftingRecord lifterEntry = serviceUtils.mapJsonToPowerliftingRecord(entry);
+                lifterLinks.add(lifterEntry);
             }
-            nameLinksMap.put(regionName.toUpperCase(), nameLinks);
+            lifterLinksMap.put(regionName.toUpperCase(), lifterLinks);
         }
 
-        return nameLinksMap;
+        return lifterLinksMap;
     }
 
 }

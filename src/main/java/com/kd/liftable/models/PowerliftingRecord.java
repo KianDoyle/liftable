@@ -8,6 +8,9 @@ import lombok.Setter;
 @Getter
 public class PowerliftingRecord {
 
+    @JsonProperty("Link")
+    private String Link;
+
     @JsonProperty("Name")
     private String Name;
 
@@ -139,7 +142,7 @@ public class PowerliftingRecord {
     }
 
     // Parameterized constructor
-    public PowerliftingRecord(String Name, String Sex, String Event, String Equipment, String Age, String AgeClass,
+    public PowerliftingRecord(String Link, String Name, String Sex, String Event, String Equipment, String Age, String AgeClass,
                               String BirthYearClass, String Division, String BodyweightKg, String WeightClassKg,
                               String Squat1Kg, String Squat2Kg, String Squat3Kg, String Squat4Kg, String Best3SquatKg,
                               String Bench1Kg, String Bench2Kg, String Bench3Kg, String Bench4Kg, String Best3BenchKg,
@@ -148,6 +151,7 @@ public class PowerliftingRecord {
                               String Glossbrenner, String Goodlift, String Tested, String Country, String State,
                               String Federation, String ParentFederation, String Date, String MeetCountry, String MeetState,
                               String MeetTown, String MeetName, String Sanctioned) {
+        this.Link = Link;
         this.Name = Name;
         this.Sex = Sex;
         this.Event = Event;

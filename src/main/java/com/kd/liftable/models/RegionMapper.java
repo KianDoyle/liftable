@@ -4,12 +4,12 @@ import lombok.Getter;
 
 @Getter
 public enum RegionMapper {
-    EUROPE("europe", "epf"),
-    NORTH_AMERICA("north america", "napf"),
-    SOUTH_AMERICA("south america", "fesupo"),
-    ASIA("asia", "asianpf"),
-    AFRICA("africa", "africanpf"),
-    OCEANIA("oceania", "orpf");
+    EUROPE("eu", "epf"),
+    NORTH_AMERICA("na", "napf"),
+    SOUTH_AMERICA("sa", "fesupo"),
+    ASIA("as", "asianpf"),
+    AFRICA("af", "africanpf"),
+    OCEANIA("oc", "orpf");
 
     // Getter for region name
     private final String regionName;

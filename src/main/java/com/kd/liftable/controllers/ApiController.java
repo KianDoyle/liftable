@@ -31,8 +31,8 @@ public class ApiController {
     public JsonNode getRegionalRankingsJson(@PathVariable String region) throws Exception {
         return apiPowerliftingService.getRegionalRankingsJSON(region);
     }
-    @GetMapping("/json/region/names/{region}")
-    public JsonNode getRegionalRankingsJsonNameOnly(@PathVariable String region) throws Exception {
-        return apiPowerliftingService.getRegionalRankingsJSONNameOnly(region);
-    }
+//    @GetMapping("/json/region/names/{region}")
+//    public JsonNode getRegionalRankingsJsonNameOnly(@PathVariable String region) throws Exception {
+//        return apiPowerliftingService.getRegionalRankingsJSONNameOnly(region);
+//    }
 }

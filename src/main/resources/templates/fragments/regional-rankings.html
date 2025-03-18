@@ -16,7 +16,16 @@
                 </thead>
                 <tbody>
                 <tr th:each="lifter : ${leaderboard.value}">
-                    <td style="background-color: #18181b; border: none; text-align: start;"><a th:text="${lifter.name}" th:href="${lifter.link}" style="cursor: pointer; text-decoration: none; color: white;"></a></td>
+                    <td style="background-color: #18181b; border: none; text-align: start;"><a th:text="${lifter.Name}" th:href="${lifter.link}" style="cursor: pointer; text-decoration: none; color: white;"></a></td>
+                    <td style="background-color: #18181b; border: none; text-align: start;"><a th:text="${lifter.Sex}" style="cursor: pointer; text-decoration: none; color: white;"></a></td>
+                    <td style="background-color: #18181b; border: none; text-align: start;"><a th:text="${lifter.Age}" style="cursor: pointer; text-decoration: none; color: white;"></a></td>
+                    <td style="background-color: #18181b; border: none; text-align: start;"><a th:text="${lifter.WeightClassKg}" style="cursor: pointer; text-decoration: none; color: white;"></a></td>
+                    <td style="background-color: #18181b; border: none; text-align: start;"><a th:text="${lifter.Best3SquatKg}" style="cursor: pointer; text-decoration: none; color: white;"></a></td>
+                    <td style="background-color: #18181b; border: none; text-align: start;"><a th:text="${lifter.Best3BenchKg}" style="cursor: pointer; text-decoration: none; color: white;"></a></td>
+                    <td style="background-color: #18181b; border: none; text-align: start;"><a th:text="${lifter.Best3DeadliftKg}" style="cursor: pointer; text-decoration: none; color: white;"></a></td>
+                    <td style="background-color: #18181b; border: none; text-align: start;"><a th:text="${lifter.TotalKg}" style="cursor: pointer; text-decoration: none; color: white;"></a></td>
+                    <td style="background-color: #18181b; border: none; text-align: start;"><a th:text="${lifter.Goodlift}" style="cursor: pointer; text-decoration: none; color: white;"></a></td>
+                    <td style="background-color: #18181b; border: none; text-align: start;"><a th:text="${lifter.Country}" style="cursor: pointer; text-decoration: none; color: white;"></a></td>
                 </tr>
                 </tbody>
             </table>
