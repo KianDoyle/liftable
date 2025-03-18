@@ -1,9 +1,5 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<div th:if="${regionalRankings}" th:fragment="regional-rankings" class="card text-light p-0 m-0 mt-5 w-100"
-     style="border-radius: 25px;">
-<!--    <div class="text-center">-->
-<!--        <h2 class="text-uppercase fw-bold">REGIONS</h2>-->
-<!--    </div>-->
+<div id="regions-card" th:if="${regionalRankings}" th:fragment="regional-rankings" class="card text-light p-0 m-0 mt-5 w-100">
     <div class="card-body m-0 p-0" style="border-radius: 25px;">
         <div class="row row-cols-6 mx-0" style="background-color: #18181b; border-radius: 25px 25px 0px 0px;">
             <div class="button-wrapper p-0 py-2 text-center" th:each="leaderboard, iterStat : ${leaderboards}" th:classappend="${iterStat.first} ? 'active' : ''">
@@ -13,7 +9,7 @@
         </div>
         <!-- Iterate over the leaderboards map (region and lifters) -->
         <div class="row m-3">
-            <div class="col p-0 m-0"
+            <div class="col p-0 m-0" id="continent-button"
                  th:each="leaderboard, iterStat : ${leaderboards}"
                  th:class="'table-wrapper' + (${iterStat.first} ? '' : ' hidden')">
                 <table class="table-sm m-0 w-100">
@@ -33,16 +29,16 @@
                     </thead>
                     <tbody>
                     <tr th:each="lifter : ${leaderboard.value}">
-                        <td><a th:text="${lifter.Name}" th:href="${lifter.link}" class="text-light text-decoration-none"></a></td>
-                        <td><a th:text="${lifter.Sex}" class="text-light text-decoration-none"></a></td>
-                        <td><a th:text="${lifter.Age}" class="text-light text-decoration-none"></a></td>
-                        <td><a th:text="${lifter.WeightClassKg}" class="text-light text-decoration-none"></a></td>
-                        <td><a th:text="${lifter.Best3SquatKg}" class="text-light text-decoration-none"></a></td>
-                        <td><a th:text="${lifter.Best3BenchKg}" class="text-light text-decoration-none"></a></td>
-                        <td><a th:text="${lifter.Best3DeadliftKg}" class="text-light text-decoration-none"></a></td>
-                        <td><a th:text="${lifter.TotalKg}" class="text-light text-decoration-none"></a></td>
-                        <td><a th:text="${lifter.Goodlift}" class="text-light text-decoration-none"></a></td>
-                        <td><a th:text="${lifter.Country}" class="text-light text-decoration-none"></a></td>
+                        <td><a th:text="${lifter.Name}" th:href="${lifter.link}"></a></td>
+                        <td><a th:text="${lifter.Sex}"></a></td>
+                        <td><a th:text="${lifter.Age}"></a></td>
+                        <td><a th:text="${lifter.WeightClassKg}"></a></td>
+                        <td><a th:text="${lifter.Best3SquatKg}"></a></td>
+                        <td><a th:text="${lifter.Best3BenchKg}"></a></td>
+                        <td><a th:text="${lifter.Best3DeadliftKg}"></a></td>
+                        <td><a th:text="${lifter.TotalKg}"></a></td>
+                        <td><a th:text="${lifter.Goodlift}"></a></td>
+                        <td><a th:text="${lifter.Country}"></a></td>
                     </tr>
                     </tbody>
                 </table>
