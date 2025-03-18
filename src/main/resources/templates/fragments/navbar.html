@@ -8,15 +8,17 @@
                                                 class="logo me-2"></a>
                 <a class="navbar-brand" th:href="@{~/web/home}">LIFTABLE</a>
                 <div class="navbar-brand mx-3" style="color: #501993">I</div>
-                <a class="navbar-brand mx-3" th:href="@{~web/compare}">COMPARE</a>
+                <div id="compare-button" class="navbar-brand mx-3">COMPARE</div>
+                <div class="navbar-brand mx-3" style="color: #501993">I</div>
+                <div id="regions-button" class="navbar-brand mx-3">REGIONS</div>
             </div>
 
             <!-- Right side: Search form -->
             <div class="col-auto ms-auto">
-                <form class="d-flex search-bar" th:action="@{/web/search}" method="get">
-                    <input class="form-control me-2" type="text" name="query" placeholder="Search..." required>
-                    <button class="btn btn-primary" type="submit">Search</button>
-                </form>
+                <div class="d-flex search-bar">
+                    <input id="searchBox" class="form-control me-2" type="text" placeholder="Search..." required>
+                    <button class="btn btn-primary" type="button" onclick="performSearch('searchBox', 'resultsContainer', '/web/search')">Search</button>
+                </div>
             </div>
         </div>
     </div>

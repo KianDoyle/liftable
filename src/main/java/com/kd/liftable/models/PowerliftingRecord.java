@@ -141,6 +141,19 @@ public class PowerliftingRecord {
     public PowerliftingRecord() {
     }
 
+
+    public PowerliftingRecord(String link, String name, String sex, String equipment, String best3SquatKg, String best3BenchKg, String best3DeadliftKg, String totalKg, String goodlift) {
+        Link = link;
+        Name = name;
+        Sex = sex;
+        Equipment = equipment;
+        Best3SquatKg = best3SquatKg;
+        Best3BenchKg = best3BenchKg;
+        Best3DeadliftKg = best3DeadliftKg;
+        TotalKg = totalKg;
+        Goodlift = goodlift;
+    }
+
     // Parameterized constructor
     public PowerliftingRecord(String Link, String Name, String Sex, String Event, String Equipment, String Age, String AgeClass,
                               String BirthYearClass, String Division, String BodyweightKg, String WeightClassKg,
@@ -194,6 +207,14 @@ public class PowerliftingRecord {
         this.MeetTown = MeetTown;
         this.MeetName = MeetName;
         this.Sanctioned = Sanctioned;
+    }
+
+    public static float parseFloatSafe(String value) {
+        try {
+            return (value != null && !value.trim().isEmpty()) ? Float.parseFloat(value.trim()) : 0f;
+        } catch (NumberFormatException e) {
+            return 0f;
+        }
     }
 
 }
