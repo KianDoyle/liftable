@@ -1,5 +1,5 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<div th:if="${showdown}" th:fragment="showdown" class="card text-light p-1 m-1 mt-5 w-100" style="border-radius: 25px;">
+<div th:fragment="showdown" class="card text-light p-0 m-0 mt-5 w-100" style="border-radius: 25px;">
     <div class="text-center">
         <h2 class="text-uppercase fw-bold">SHOWDOWN</h2>
     </div>
@@ -10,7 +10,7 @@
             <div class="col-md-5">
                 <div class="d-flex">
                     <input id="searchBox1" class="form-control me-2" type="text" placeholder="Search..." required>
-                    <button class="btn btn-primary" type="button" onclick="performSearch('searchBox1', 'resultsContainer1')">Search</button>
+                    <button class="btn btn-primary" type="button" onclick="performSearch('searchBox1', 'resultsContainer1', '/web/showdownSearch')">Search</button>
                 </div>
                 <div id="resultsContainer1" class="mt-3"></div>
             </div>
@@ -24,9 +24,9 @@
             <div class="col-md-5">
                 <div class="d-flex">
                     <input id="searchBox2" class="form-control me-2" type="text" placeholder="Search..." required>
-                    <button class="btn btn-primary" type="button" onclick="performSearch('searchBox2', 'resultsContainer2')">Search</button>
+                    <button class="btn btn-primary" type="button" onclick="performSearch('searchBox2', 'resultsContainer2', '/web/showdownSearch')">Search</button>
                 </div>
-                <div id="resultsContainer2" class="m-0 p-0 mt-3"></div>
+                <div id="resultsContainer2" class="mt-3"></div>
             </div>
         </div>
     </div>

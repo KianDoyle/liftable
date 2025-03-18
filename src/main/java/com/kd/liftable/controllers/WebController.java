@@ -24,10 +24,7 @@ public class WebController {
 
     @GetMapping("/home")
     public String getHome(Model model) throws Exception {
-        model.addAttribute("lifterList", null);
-        model.addAttribute("lifter", null);
         model.addAttribute("records", null);
-        model.addAttribute("showdown", true);
         model.addAttribute("regionalRankings", true);
         model.addAttribute("leaderboards", openPowerliftingService.fetchAllRegionalRankings());
         return "index";
@@ -36,16 +33,14 @@ public class WebController {
     @GetMapping("/search")
     public String search(@RequestParam(name = "query", required = false) String query, Model model) throws Exception {
         model.addAttribute("lifterList", openPowerliftingService.fetchLiftersDisambiguationList(query));
-        model.addAttribute("showdown", false);
-        return "index"; // Renders search.html
+        return "fragments/search :: search"; // Renders search.html
     }
 
-    @GetMapping("/lifter/{name}")
+    @GetMapping("/search/lifter/{name}")
     public String getLifterData(@PathVariable String name, Model model) throws Exception {
-        model.addAttribute("lifter", openPowerliftingService.fetchLifterData(name));
+        model.addAttribute("lifter", openPowerliftingService.createLifterCard(name));
         model.addAttribute("records", openPowerliftingService.getLifterRecords(name));
-        model.addAttribute("showdown", false);
-        return "index";
+        return "fragments/lifter-details :: lifter-details";
     }
 
     @GetMapping("/showdownSearch")
@@ -56,8 +51,8 @@ public class WebController {
 
     @GetMapping("/showdownSearch/lifter/{name}")
     public String getShowdownLifter(@PathVariable String name, Model model) throws Exception {
-        model.addAttribute("lifter", openPowerliftingService.fetchLifterData(name));
-        return "fragments/lifter-info :: lifter-info";
+        model.addAttribute("lifter", openPowerliftingService.createLifterCard(name));
+        return "fragments/lifter-card :: lifter-card";
     }
 
 }

@@ -1,5 +1,7 @@
 package com.kd.liftable.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -15,6 +17,7 @@ import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -65,6 +68,12 @@ public class ServiceUtils {
         return objectMapper.readTree(jsonString);  // Converts the JSON string into a JsonNode
     }
 
+    public static ArrayList<PowerliftingRecord> convertJsonStringToPlRecord(String jsonString) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(jsonString, new TypeReference<>() {
+        });
+    }
+
     public PowerliftingRecord mapJsonToPowerliftingRecord(JsonNode row) {
 
         return new PowerliftingRecord(
@@ -112,5 +121,31 @@ public class ServiceUtils {
                 "European Powerlifting Championships", // MeetName
                 "Yes" // Sanctioned (assuming all records are sanctioned)
         );
+    }
+
+    public Float findLargestLift(ArrayList<PowerliftingRecord> records, String equip, String lift) {
+        return switch (lift) {
+            case ("squat") -> records.stream()
+                    .filter(pr -> pr.getEquipment().trim().equalsIgnoreCase(equip))
+                    .map(pr -> PowerliftingRecord.parseFloatSafe(pr.getBest3SquatKg()))
+                    .max(Float::compare).orElse(0f);
+            case ("bench") -> records.stream()
+                    .filter(pr -> pr.getEquipment().trim().equalsIgnoreCase(equip))
+                    .map(pr -> PowerliftingRecord.parseFloatSafe(pr.getBest3BenchKg()))
+                    .max(Float::compare).orElse(0f);
+            case ("deadlift") -> records.stream()
+                    .filter(pr -> pr.getEquipment().trim().equalsIgnoreCase(equip))
+                    .map(pr -> PowerliftingRecord.parseFloatSafe(pr.getBest3DeadliftKg()))
+                    .max(Float::compare).orElse(0f);
+            case ("total") -> records.stream()
+                    .filter(pr -> pr.getEquipment().trim().equalsIgnoreCase(equip))
+                    .map(pr -> PowerliftingRecord.parseFloatSafe(pr.getTotalKg()))
+                    .max(Float::compare).orElse(0f);
+            case ("glp") -> records.stream()
+                    .filter(pr -> pr.getEquipment().trim().equalsIgnoreCase(equip))
+                    .map(pr -> PowerliftingRecord.parseFloatSafe(pr.getGoodlift()))
+                    .max(Float::compare).orElse(0f);
+            default -> 0.0F;
+        };
     }
 }
