@@ -1,3 +1,38 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<div th:fragment="regional-rankings"></div>
+<div th:if="${regionalRankings}" th:fragment="regional-rankings" class="card text-light p-1 m-1 mt-5 w-100"
+     style="border-radius: 25px;">
+    <div class="text-center">
+        <h2 class="text-uppercase fw-bold">REGIONS</h2>
+    </div>
+    <div class="card-body" style="border-radius: 25px;">
+        <div class="row mb-2">
+            <!-- Iterate over the leaderboards map (region and lifters) -->
+            <div class="col p-0 m-0" th:each="leaderboard : ${leaderboards}">
+            <table class="table table-dark table-sm m-0 w-100">
+                <thead>
+                <tr>
+                    <th th:text="${leaderboard.key}" style="background-color: #18181b; border: none;"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="lifter : ${leaderboard.value}">
+                    <td style="background-color: #18181b; border: none; text-align: start;"><a th:text="${lifter.Name}" th:href="${lifter.link}" style="cursor: pointer; text-decoration: none; color: white;"></a></td>
+                    <td style="background-color: #18181b; border: none; text-align: start;"><a th:text="${lifter.Sex}" style="cursor: pointer; text-decoration: none; color: white;"></a></td>
+                    <td style="background-color: #18181b; border: none; text-align: start;"><a th:text="${lifter.Age}" style="cursor: pointer; text-decoration: none; color: white;"></a></td>
+                    <td style="background-color: #18181b; border: none; text-align: start;"><a th:text="${lifter.WeightClassKg}" style="cursor: pointer; text-decoration: none; color: white;"></a></td>
+                    <td style="background-color: #18181b; border: none; text-align: start;"><a th:text="${lifter.Best3SquatKg}" style="cursor: pointer; text-decoration: none; color: white;"></a></td>
+                    <td style="background-color: #18181b; border: none; text-align: start;"><a th:text="${lifter.Best3BenchKg}" style="cursor: pointer; text-decoration: none; color: white;"></a></td>
+                    <td style="background-color: #18181b; border: none; text-align: start;"><a th:text="${lifter.Best3DeadliftKg}" style="cursor: pointer; text-decoration: none; color: white;"></a></td>
+                    <td style="background-color: #18181b; border: none; text-align: start;"><a th:text="${lifter.TotalKg}" style="cursor: pointer; text-decoration: none; color: white;"></a></td>
+                    <td style="background-color: #18181b; border: none; text-align: start;"><a th:text="${lifter.Goodlift}" style="cursor: pointer; text-decoration: none; color: white;"></a></td>
+                    <td style="background-color: #18181b; border: none; text-align: start;"><a th:text="${lifter.Country}" style="cursor: pointer; text-decoration: none; color: white;"></a></td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+
+        </div>
+    </div>
+</div>
 </html>
+

@@ -83,6 +83,70 @@
           height: 30px;
         }
 
+        .button {
+            background-color: #28282e;
+            color: #34343e;
+            border: none;
+        }
+
+        .button-wrapper {
+            background-color: #28282e;
+        }
+
+        .button-wrapper:hover {
+            cursor: pointer;
+        }
+
+        .button-wrapper:first-of-type {
+            border-radius: 25px 0px 0px 0px;
+        }
+
+        .button-wrapper:last-of-type {
+            border-radius: 0px 25px 0px 0px;
+        }
+
+        .active + .button-wrapper {
+            border-radius: 0px 0px 0px 10px;
+        }
+
+        .button-wrapper:has(+ .active) {
+            border-radius: 0px 0px 10px 0px;
+        }
+
+        .active + .button-wrapper:last-of-type {
+            border-radius: 0px 25px 0px 10px;
+        }
+
+        .button-wrapper:first-of-type:has(+ .active) {
+            border-radius: 25px 0px 10px 0px;
+        }
+
+        th, td {
+            background-color: #18181b;
+            border: none;
+            text-align: start;
+        }
+        .active {
+            background-color: #18181b;
+            color: white;
+        }
+        .hidden {
+            display: none;
+        }
+        .table-wrapper {
+            padding: 0;
+            margin: 0;
+        }
+
+        .table th, .table td {
+            color: white;
+            background-color: #18181b;
+        }
+
+        td > a {
+            color: white;
+        }
+
     </style>
 </head>
 <body>
@@ -114,7 +178,7 @@
                 <div th:replace="~{fragments/showdown :: showdown}"></div>
             </div>
             <div class="col-md-6">
-                <div th:replace="~{fragments/regional-rankings :: regional-rankings}"></div>
+                <div th:replace="~{fragments/regional-rankings-2 :: regional-rankings}"></div>
             </div>
         </div>
 
@@ -191,6 +255,24 @@
             })
             .catch(error => console.error('Error fetching lifter info:', error));  // Fixed the error log typo
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const buttons = document.querySelectorAll(".button");
+        const butWraps = document.querySelectorAll(".button-wrapper");
+        const tables = document.querySelectorAll(".table-wrapper");
+
+        butWraps.forEach((butWrap, index) => {
+            butWrap.addEventListener("click", function () {
+                butWraps.forEach(btn => btn.classList.remove("active"));
+                butWraps.forEach(btn => btn.children[1].classList.remove("active"));
+                tables.forEach(tbl => tbl.classList.add("hidden"));
+
+                butWrap.classList.add("active");
+                butWrap.children[1].classList.add("active");
+                tables[index].classList.remove("hidden");
+            });
+        });
+    });
 </script>
 
 </body>
