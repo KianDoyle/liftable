@@ -19,11 +19,12 @@ import org.springframework.stereotype.Service;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ServiceUtils {
 
-    public static Document fetchResponseDocument(String url) throws Exception {
+    public Document fetchResponseDocument(String url) throws Exception {
         return Jsoup.connect(url)
                 .header("User-Agent", "Googlebot") // Spoof as a bot
                 .header("Accept", "text/html")
@@ -33,7 +34,7 @@ public class ServiceUtils {
                 .parse();
     }
 
-    public static String fetchResponseString(String url) throws Exception {
+    public String fetchResponseString(String url) throws Exception {
         return Jsoup.connect(url)
                 .header("User-Agent", "Googlebot")
                 .header("Accept", "text/html")
@@ -43,7 +44,7 @@ public class ServiceUtils {
                 .body();
     }
 
-    public static String convertCsvToJsonString(String csvData) throws Exception {
+    public String convertCsvToJsonString(String csvData) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
@@ -62,13 +63,34 @@ public class ServiceUtils {
         }
     }
 
+//    public ObjectNode convertArrayListToObjectNode(ArrayList<Float> data, String name) throws Exception {
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        ObjectNode jsonObject = objectMapper.createObjectNode();
+//        jsonObject.put(name, data.toString());
+//        return jsonObject;
+//    }
+
+    public String convertArrayListToJsonString(ArrayList<Float> data) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(data);
+    }
+
+    public ArrayNode convertArrayListToArrNode(ArrayList<Float> data) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ArrayNode arrayNode = objectMapper.createArrayNode();
+        for (Float value : data) {
+            arrayNode.add(value);
+        }
+        return arrayNode;
+    }
+
     // Method to convert a JSON string to a JsonNode object
-    public static JsonNode convertJsonStringToJsonNode(String jsonString) throws Exception {
+    public JsonNode convertJsonStringToJsonNode(String jsonString) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readTree(jsonString);  // Converts the JSON string into a JsonNode
     }
 
-    public static ArrayList<PowerliftingRecord> convertJsonStringToPlRecord(String jsonString) throws JsonProcessingException {
+    public ArrayList<PowerliftingRecord> convertJsonStringToPlRecord(String jsonString) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(jsonString, new TypeReference<>() {
         });
@@ -123,29 +145,31 @@ public class ServiceUtils {
         );
     }
 
-    public Float findLargestLift(ArrayList<PowerliftingRecord> records, String equip, String lift) {
-        return switch (lift) {
-            case ("squat") -> records.stream()
-                    .filter(pr -> pr.getEquipment().trim().equalsIgnoreCase(equip))
-                    .map(pr -> PowerliftingRecord.parseFloatSafe(pr.getBest3SquatKg()))
-                    .max(Float::compare).orElse(0f);
-            case ("bench") -> records.stream()
-                    .filter(pr -> pr.getEquipment().trim().equalsIgnoreCase(equip))
-                    .map(pr -> PowerliftingRecord.parseFloatSafe(pr.getBest3BenchKg()))
-                    .max(Float::compare).orElse(0f);
-            case ("deadlift") -> records.stream()
-                    .filter(pr -> pr.getEquipment().trim().equalsIgnoreCase(equip))
-                    .map(pr -> PowerliftingRecord.parseFloatSafe(pr.getBest3DeadliftKg()))
-                    .max(Float::compare).orElse(0f);
-            case ("total") -> records.stream()
-                    .filter(pr -> pr.getEquipment().trim().equalsIgnoreCase(equip))
-                    .map(pr -> PowerliftingRecord.parseFloatSafe(pr.getTotalKg()))
-                    .max(Float::compare).orElse(0f);
-            case ("glp") -> records.stream()
-                    .filter(pr -> pr.getEquipment().trim().equalsIgnoreCase(equip))
-                    .map(pr -> PowerliftingRecord.parseFloatSafe(pr.getGoodlift()))
-                    .max(Float::compare).orElse(0f);
-            default -> 0.0F;
-        };
+    public ArrayList<Float> isolateColumn(ArrayList<PowerliftingRecord> powerliftingRecords, String colName, String equip, String event) {
+        return powerliftingRecords.stream()
+                .filter(pr -> pr.getEquipment().trim().equalsIgnoreCase(equip) && (pr.getEvent().trim().equalsIgnoreCase(event) || event.equalsIgnoreCase("a")))
+                .map(pr -> PowerliftingRecord.parseFloatSafe(pr.getFieldValue(colName))).collect(Collectors.toCollection(ArrayList::new));
     }
+
+    public Float findLargestLift(ArrayList<PowerliftingRecord> records, String equip, String colName, String event) {
+        return isolateColumn(records, colName, equip, event).stream().max(Float::compare).orElse(0F);
+    }
+
+    public ArrayNode zipDataArrays(ArrayNode x, ArrayNode y) {
+        int size = Math.min(x.size(), y.size());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ArrayNode dataArray = objectMapper.createArrayNode();
+
+        // Build scatter plot data points
+        for (int i = 0; i < size; i++) {
+            ObjectNode dataPoint = objectMapper.createObjectNode();
+            dataPoint.set("x", x.get(i));
+            dataPoint.set("y", y.get(i));
+            dataArray.add(dataPoint);
+        }
+
+        return dataArray;
+    }
+
 }

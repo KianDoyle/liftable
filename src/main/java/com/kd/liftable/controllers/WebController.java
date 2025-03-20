@@ -1,6 +1,7 @@
 package com.kd.liftable.controllers;
 
 import com.kd.liftable.models.Lifter;
+import com.kd.liftable.models.PowerliftingRecord;
 import com.kd.liftable.services.OpenPowerliftingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("web")

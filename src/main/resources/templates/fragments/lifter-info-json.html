@@ -27,7 +27,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="record : ${records}">
+            <tr th:each="record : ${records.getRecords()}">
                 <td th:text="${record.getMeetName()}"></td>
                 <td th:text="${record.getMeetCountry()}"></td>
                 <td th:text="${record.getDate()}"></td>

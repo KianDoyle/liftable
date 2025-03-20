@@ -31,4 +31,9 @@ public class ApiController {
     public JsonNode getRegionalRankingsJson(@PathVariable String region) throws Exception {
         return apiPowerliftingService.getRegionalRankingsJSON(region);
     }
+
+    @GetMapping("/json/scatter/{name}")
+    public JsonNode getScatterChartJson(@PathVariable String name) throws Exception {
+        return apiPowerliftingService.getScatterChartData(name);
+    }
 }

@@ -1,9 +1,8 @@
 package com.kd.liftable.services;
 
 import com.fasterxml.jackson.databind.*;
-import com.kd.liftable.models.NameLink;
-import com.kd.liftable.models.PowerliftingRecord;
-import com.kd.liftable.models.RegionMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.kd.liftable.models.*;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
@@ -22,25 +21,27 @@ public class OpenPowerliftingService {
     }
 
     // Used to create record objects for thymeleaf
-    public ArrayList<PowerliftingRecord> getLifterRecords(String lifterName) throws Exception {
+    public RecordData getLifterRecords(String lifterName) throws Exception {
         String csvData = apiPowerliftingService.fetchLifterDataRaw(lifterName);
-        String jsonString = ServiceUtils.convertCsvToJsonString(csvData);
-        return ServiceUtils.convertJsonStringToPlRecord(jsonString);
+        String jsonString = serviceUtils.convertCsvToJsonString(csvData);
+        ArrayList<PowerliftingRecord> records = serviceUtils.convertJsonStringToPlRecord(jsonString);
+
+        return new RecordData(apiPowerliftingService.getScatterChartFromData(records, "BW", "GLP", LiftMapper.BODYWEIGHT.getColName(), LiftMapper.GOODLIFT.getColName()), records);
     }
 
     public PowerliftingRecord createLifterCard(String lifterName) throws Exception {
-        ArrayList<PowerliftingRecord> records = getLifterRecords(lifterName);
+        ArrayList<PowerliftingRecord> records = getLifterRecords(lifterName).getRecords();
 
         return new PowerliftingRecord(
                         "/web/lifter/" + lifterName,
                         records.getFirst().getName(),
                         records.getFirst().getSex(),
                         "Classic",
-                        String.valueOf(serviceUtils.findLargestLift(records, "raw", "squat")),
-                        String.valueOf(serviceUtils.findLargestLift(records, "raw", "bench")),
-                        String.valueOf(serviceUtils.findLargestLift(records, "raw", "deadlift")),
-                        String.valueOf(serviceUtils.findLargestLift(records, "raw", "total")),
-                        String.valueOf(serviceUtils.findLargestLift(records, "raw", "glp"))
+                        String.valueOf(serviceUtils.findLargestLift(records, "raw", LiftMapper.BEST_SQUAT.getColName(), "a")),
+                        String.valueOf(serviceUtils.findLargestLift(records, "raw", LiftMapper.BEST_BENCH.getColName(), "a")),
+                        String.valueOf(serviceUtils.findLargestLift(records, "raw", LiftMapper.BEST_DEADLIFT.getColName(), "a")),
+                        String.valueOf(serviceUtils.findLargestLift(records, "raw", LiftMapper.TOTAL.getColName(), "a")),
+                        String.valueOf(serviceUtils.findLargestLift(records, "raw", LiftMapper.GOODLIFT.getColName(), "a"))
                         );
     }
 
@@ -50,7 +51,7 @@ public class OpenPowerliftingService {
 
         String url = baseUrl + lifterName.strip().replaceAll("[^a-zA-Z]", "");
 
-        Document doc = ServiceUtils.fetchResponseDocument(url);
+        Document doc = serviceUtils.fetchResponseDocument(url);
 
         if (!doc.body().text().isEmpty() || !doc.body().text().equals("404")) {
             if (doc.select("title").text().equals("Disambiguation")) {
