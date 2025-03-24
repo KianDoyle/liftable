@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kd.liftable.models.PowerliftingRecord;
 import org.apache.commons.csv.CSVFormat;
@@ -62,13 +63,6 @@ public class ServiceUtils {
             return objectMapper.writeValueAsString(jsonArray);
         }
     }
-
-//    public ObjectNode convertArrayListToObjectNode(ArrayList<Float> data, String name) throws Exception {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        ObjectNode jsonObject = objectMapper.createObjectNode();
-//        jsonObject.put(name, data.toString());
-//        return jsonObject;
-//    }
 
     public String convertArrayListToJsonString(ArrayList<Float> data) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -151,8 +145,12 @@ public class ServiceUtils {
                 .map(pr -> PowerliftingRecord.parseFloatSafe(pr.getFieldValue(colName))).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public Float findLargestLift(ArrayList<PowerliftingRecord> records, String equip, String colName, String event) {
-        return isolateColumn(records, colName, equip, event).stream().max(Float::compare).orElse(0F);
+    public ArrayList<Float> findLargestLifts(ArrayList<PowerliftingRecord> records, String equip, String event, ArrayList<String> colNames) {
+        ArrayList<Float> largestLifts = new ArrayList<>();
+        for (String colName : colNames) {
+            largestLifts.add(isolateColumn(records, colName, equip, event).stream().max(Float::compare).orElse(0F));
+        }
+        return largestLifts;
     }
 
     public ArrayNode zipDataArrays(ArrayNode x, ArrayNode y) {
@@ -172,4 +170,13 @@ public class ServiceUtils {
         return dataArray;
     }
 
+    public JsonNode reverseNode(JsonNode node) {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        ArrayNode reversedNode = objectMapper.createArrayNode();
+        for (int i = node.size() - 1; i >= 0; i--) {
+            reversedNode.add(node.get(i));
+        }
+        return reversedNode;
+    }
 }

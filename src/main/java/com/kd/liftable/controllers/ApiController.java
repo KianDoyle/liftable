@@ -36,4 +36,5 @@ public class ApiController {
     public JsonNode getScatterChartJson(@PathVariable String name) throws Exception {
         return apiPowerliftingService.getScatterChartData(name);
     }
+
 }
