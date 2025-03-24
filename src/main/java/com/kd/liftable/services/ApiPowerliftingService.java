@@ -2,26 +2,35 @@ package com.kd.liftable.services;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.kd.liftable.models.LiftMapper;
 import com.kd.liftable.models.PowerliftingRecord;
 import com.kd.liftable.models.RegionMapper;
+import com.kd.liftable.repositories.LifterDataRepository;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
-import java.util.List;
+
 import java.util.ArrayList;
-import org.apache.commons.lang3.StringUtils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
 public class ApiPowerliftingService {
 
+    private final LifterDataRepository lifterDataRepository;
+    private final ServiceUtils serviceUtils;
+
+    public ApiPowerliftingService(LifterDataRepository lifterDataRepository, ServiceUtils serviceUtils) {
+        this.lifterDataRepository = lifterDataRepository;
+        this.serviceUtils = serviceUtils;
+    }
+
     public JsonNode getLifterJson(String lifterName) throws Exception {
         String csvData = fetchLifterDataRaw(lifterName);
-        String jsonString = ServiceUtils.convertCsvToJsonString(csvData);
-        return ServiceUtils.convertJsonStringToJsonNode(jsonString);
+        String jsonString = serviceUtils.convertCsvToJsonString(csvData);
+        JsonNode jsonNode = serviceUtils.convertJsonStringToJsonNode(jsonString);
+        return serviceUtils.reverseNode(jsonNode);
     }
 
     public String fetchLifterDataRaw(String lifterName) throws Exception {
@@ -29,7 +38,7 @@ public class ApiPowerliftingService {
         String formattedName = lifterName.strip().toLowerCase();
         String apiUrl = url + formattedName;
 
-        return ServiceUtils.fetchResponseString(apiUrl);
+        return serviceUtils.fetchResponseString(apiUrl);
     }
 
     public JsonNode getRegionalRankingsJSON(String region) throws Exception {
@@ -38,7 +47,7 @@ public class ApiPowerliftingService {
 
         String url = "https://www.openipf.org/rankings/" + regionalFed;
 
-        Document doc = ServiceUtils.fetchResponseDocument(url);
+        Document doc = serviceUtils.fetchResponseDocument(url);
 
         // Extract the script tag containing `initial_data`
         Element scriptTag = doc.select("script:containsData(initial_data)").first();
@@ -59,6 +68,48 @@ public class ApiPowerliftingService {
 
         String jsonRowsString = "{\"" + region + "\":" + "[" + matcher.group(1) + "]" + "}";
 
-        return ServiceUtils.convertJsonStringToJsonNode(jsonRowsString);
+        return serviceUtils.convertJsonStringToJsonNode(jsonRowsString);
+    }
+
+    //API
+
+    public ObjectNode buildLabels(String x, String y) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode labelsNode = objectMapper.createObjectNode();
+        labelsNode.put("x", x);
+        labelsNode.put("y", y);
+
+        return labelsNode;
+    }
+
+    public ArrayNode buildScatterSet(ArrayList<PowerliftingRecord> records, String x, String y) throws Exception {
+        ArrayNode xData = serviceUtils.convertArrayListToArrNode(
+                serviceUtils.isolateColumn(records, x, "raw", "sbd"));
+
+        ArrayNode yData = serviceUtils.convertArrayListToArrNode(
+                serviceUtils.isolateColumn(records, y, "raw", "sbd"));
+
+        return serviceUtils.zipDataArrays(xData, yData);
+    }
+
+    public JsonNode getScatterChartData(String name) throws Exception {
+        String csvData = fetchLifterDataRaw(name);
+        String jsonString = serviceUtils.convertCsvToJsonString(csvData);
+        ArrayList<PowerliftingRecord> records = serviceUtils.convertJsonStringToPlRecord(jsonString);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode chartData = objectMapper.createObjectNode();
+        chartData.set("labels", buildLabels("BW", "GLP"));
+        chartData.set("data", buildScatterSet(records, LiftMapper.BODYWEIGHT.getColName(), LiftMapper.GOODLIFT.getColName()));
+        return chartData;
+    }
+
+    //API PASS TO WEB
+    public JsonNode getScatterChartFromData(ArrayList<PowerliftingRecord> records, String xl, String yl, String xd, String yd) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode chartData = objectMapper.createObjectNode();
+        chartData.set("labels", buildLabels(xl, yl));
+        chartData.set("data", buildScatterSet(records, xd, yd));
+        return chartData;
     }
 }

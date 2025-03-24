@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.lang.reflect.Field;
+
 @Setter
 @Getter
 public class PowerliftingRecord {
@@ -214,6 +216,16 @@ public class PowerliftingRecord {
             return (value != null && !value.trim().isEmpty()) ? Float.parseFloat(value.trim()) : 0f;
         } catch (NumberFormatException e) {
             return 0f;
+        }
+    }
+
+    public String getFieldValue(String fieldName) {
+        try {
+            Field field = this.getClass().getDeclaredField(fieldName); // Get field by name
+            field.setAccessible(true); // Allow access to private fields
+            return (String) field.get(this); // Return field value
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            return "Field not found or inaccessible: " + fieldName;
         }
     }
 
