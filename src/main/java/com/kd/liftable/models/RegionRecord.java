@@ -11,13 +11,16 @@ import java.time.LocalDate;
 @Setter
 @Getter
 @Entity
-@Table(name = "lifter_data", schema = "open_ipf_db")
-public class Record {
+@Table(name = "top_lifters_per_federation", schema = "open_ipf_db")
+public class RegionRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    @Column(name = "rn")
+    private Integer rn;
 
     @Column(name = "Name")
     private String name;
@@ -149,7 +152,7 @@ public class Record {
     private String link;
 
     // Default constructor
-    public Record() {
+    public RegionRecord() {
     }
 
     public float getFloatFieldValue(String fieldName) {

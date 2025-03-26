@@ -1,0 +1,14 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<div th:fragment="showdown-search">
+  <div class="container d-flex justify-content-center w-100 p-0">
+    <div class="results-card w-100 text-center">
+      <h3 class="text-center">Results</h3>
+      <ul class="list-group mt-3">
+        <li class="list-group-item" th:each="name : ${names}" th:onclick="populateShowdown('[(${name.getLink()})]', this)">
+          <a th:text="${name.getName()}"></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+</html>

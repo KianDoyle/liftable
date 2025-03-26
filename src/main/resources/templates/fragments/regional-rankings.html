@@ -1,17 +1,20 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<div id="regions-card" th:if="${regionalRankings}" th:fragment="regional-rankings" class="card text-light p-0 m-0 mt-5 w-100">
+<div id="regions-card" th:fragment="regional-rankings" class="card text-light p-0 m-0 mt-5 w-100">
     <div class="card-body m-0 p-0" style="border-radius: 25px;">
         <div class="row row-cols-6 mx-0" style="background-color: #18181b; border-radius: 25px 25px 0px 0px;">
-            <div class="button-wrapper p-0 py-2 text-center" th:each="leaderboard, iterStat : ${leaderboards}" th:classappend="${iterStat.first} ? 'active' : ''">
+            <div class="button-wrapper p-0 py-2 text-center"
+                    th:each="leaderboard, iterStat : ${leaderboards}"
+                    th:classappend="${iterStat.first} ? 'active' : ''"
+                    th:onclick="swapTable([(${iterStat.index})])">
                 <img th:src="@{|/${leaderboard.key}.png|}" alt="Continent Icon" class="icon w-25">
-                <button class="p-0 m-0 button" th:text="${leaderboard.key}" th:classappend="${iterStat.first} ? 'active' : ''"></button>
+                <button class="p-0 m-0 button" th:text="${leaderboard.key.toUpperCase()}" th:classappend="${iterStat.first} ? 'active' : ''"></button>
             </div>
         </div>
         <!-- Iterate over the leaderboards map (region and lifters) -->
         <div class="row m-3">
-            <div class="col p-0 m-0" id="continent-button"
+            <div class="col p-0 m-0"
                  th:each="leaderboard, iterStat : ${leaderboards}"
-                 th:class="'table-wrapper' + (${iterStat.first} ? '' : ' hidden')">
+                 th:class="(${iterStat.first} ? ' table-wrapper ' : ' table-wrapper hidden')">
                 <table class="table-sm m-0 w-100">
                     <thead>
                     <tr>
@@ -29,16 +32,16 @@
                     </thead>
                     <tbody>
                     <tr th:each="lifter : ${leaderboard.value}">
-                        <td><a th:text="${lifter.Name}" th:href="${lifter.link}"></a></td>
-                        <td><a th:text="${lifter.Sex}"></a></td>
-                        <td><a th:text="${lifter.Age}"></a></td>
-                        <td><a th:text="${lifter.WeightClassKg}"></a></td>
-                        <td><a th:text="${lifter.Best3SquatKg}"></a></td>
-                        <td><a th:text="${lifter.Best3BenchKg}"></a></td>
-                        <td><a th:text="${lifter.Best3DeadliftKg}"></a></td>
-                        <td><a th:text="${lifter.TotalKg}"></a></td>
-                        <td><a th:text="${lifter.Goodlift}"></a></td>
-                        <td><a th:text="${lifter.Country}"></a></td>
+                        <td><a th:text="${lifter.getName()}" th:onclick="populate('dataContainer', '[(${lifter.getLink()})]')"></a></td>
+                        <td th:text="${lifter.getSex()}"></td>
+                        <td th:text="${lifter.getAge()}"></td>
+                        <td th:text="${lifter.getWeightClassKg()}"></td>
+                        <td th:text="${lifter.getBest3SquatKg()}"></td>
+                        <td th:text="${lifter.getBest3BenchKg()}"></td>
+                        <td th:text="${lifter.getBest3DeadliftKg()}"></td>
+                        <td th:text="${lifter.getTotalKg()}"></td>
+                        <td th:text="${lifter.getGoodlift()}"></td>
+                        <td th:text="${lifter.getCountry()}"></td>
                     </tr>
                     </tbody>
                 </table>

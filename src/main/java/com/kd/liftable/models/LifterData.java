@@ -10,19 +10,11 @@ import java.util.ArrayList;
 @Getter
 public class LifterData {
     private JsonNode chartData;
-    private PowerliftingRecord lifterRecord;
     private LifterCard lifterCard;
-    private ArrayList<PowerliftingRecord> plRecords;
     private ArrayList<Record> records;
 
     public LifterData() {
 
-    }
-
-    public LifterData(JsonNode chartData, PowerliftingRecord lifterRecord, ArrayList<PowerliftingRecord> records) {
-        this.chartData = chartData;
-        this.lifterRecord = lifterRecord;
-        this.plRecords = records;
     }
 
     public LifterData(LifterCard lifterCard, ArrayList<Record> records, JsonNode chartData) {

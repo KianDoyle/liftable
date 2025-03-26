@@ -17,11 +17,6 @@ public class ApiController {
         this.apiPowerliftingService = apiPowerliftingService;
     }
 
-    @GetMapping("/csv/{name}")
-    public String getLifterDataCSV(@PathVariable String name) throws Exception {
-        return apiPowerliftingService.fetchLifterDataRaw(name);
-    }
-
     @GetMapping("/json/lifter/{name}")
     public JsonNode getLifterDataJSON(@PathVariable String name) throws Exception {
         return apiPowerliftingService.getLifterJson(name);
@@ -34,7 +29,8 @@ public class ApiController {
 
     @GetMapping("/json/scatter/{name}")
     public JsonNode getScatterChartJson(@PathVariable String name) throws Exception {
-        return apiPowerliftingService.getScatterChartData(name);
+//        return apiPowerliftingService.getScatterChartData(name);
+        return null;
     }
 
 }
