@@ -3,188 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Liftable</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {
-            background-color: #0e0e10;
-            color: #e0e0e0;
-            font-family: 'Inter', sans-serif;
-        }
-
-        body:hover {
-            cursor: default;
-        }
-
-        .navbar {
-            background-color: #0e0e10;
-            padding: 5px 0px;
-        }
-
-        .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #fff;
-        }
-
-        .search-bar {
-            max-width: 300px;
-        }
-
-        .form-control {
-            background-color: #25252a;
-            border: none;
-            color: #fff;
-        }
-
-        .form-control::placeholder {
-            color: #a1a1a1;
-        }
-
-        .btn-primary {
-            background-color: #501993;
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background-color: #772ce8;
-        }
-
-        .card, .card-body {
-            background-color: #18181b;
-        }
-
-        .results-card {
-            background-color: #18181b;
-            border-radius: 10px;
-            padding: 15px;
-            /*            filter: drop-shadow(0 0 1px rgba(141, 67, 232, 0.5));*/
-        }
-
-        .list-group-item {
-            background-color: #25252a;
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin-bottom: 5px;
-            cursor: pointer;
-        }
-
-        .logo {
-            width: 50px;
-        }
-
-        .button {
-            background-color: #28282e;
-            color: inherit;
-            border: none;
-        }
-
-        .button-wrapper {
-            background-color: #28282e;
-            color: #34343e;
-        }
-
-        .button-wrapper:hover {
-            cursor: pointer;
-            color: white;
-        }
-
-        .button-wrapper:first-of-type {
-            border-radius: 15px 0px 0px 0px;
-        }
-
-        .button-wrapper:last-of-type {
-            border-radius: 0px 15px 0px 0px;
-        }
-
-        .active + .button-wrapper {
-            border-radius: 0px 0px 0px 10px;
-        }
-
-        .button-wrapper:has(+ .active) {
-            border-radius: 0px 0px 10px 0px;
-        }
-
-        .active + .button-wrapper:last-of-type {
-            border-radius: 0px 15px 0px 10px;
-        }
-
-        .button-wrapper:first-of-type:has(+ .active) {
-            border-radius: 15px 0px 10px 0px;
-        }
-
-        .table-wrapper {
-            padding: 0;
-            margin: 0;
-        }
-
-        th, td {
-            background-color: #18181b;
-            border: none;
-            color: white;
-            text-align: center;
-            font-size: 12px;
-            padding-block: 5px;
-        }
-
-        tr > th:first-child, tr > td:first-child {
-            text-align: start;
-        }
-
-        td a {
-            display: block;
-            width: 100%;
-            height: 100%;
-            text-decoration: none;
-            color: white;
-        }
-
-        tbody tr:hover {
-            background-color: #2c2c2e !important;
-        }
-
-        tr:hover td {
-            background-color: #2c2c2e;
-        }
-
-        #lifter-info th {
-            padding-block: 7px;
-            font-size: 14px;
-        }
-
-        .active {
-            background-color: #18181b;
-            color: white;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .card, #lifter-info, .results-card {
-            filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 1px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 1px rgba(141, 67, 232, 0.50)) drop-shadow(0 0 1px rgba(141, 67, 232, 0.50));
-            border-radius: 15px;
-        }
-
-        .highlight {
-            filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 1px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 1px rgba(141, 67, 232, 0.50)) drop-shadow(0 0 1px rgba(141, 67, 232, 0.50));
-            animation: pulse 0.7s infinite alternate;
-        }
-
-        @-webkit-keyframes pulse {
-            100% {
-                filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 3px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 4px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 5px rgba(141, 67, 232, 0.50));
-            }
-        }
-        @keyframes pulse {
-            100% {
-                filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 3px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 4px rgba(141, 67, 232, 0.50)) drop-shadow(0 0 5px rgba(141, 67, 232, 0.50));
-            }
-        }
-
-    </style>
+<!--    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
+    <link type="text/css" th:href="@{/css/global-styles.css}" rel="stylesheet">
 </head>
 <body>
 
@@ -194,14 +16,17 @@
 <div class="container-fluid justify-content-center">
     <div class="col-12" style="height: 100px;"></div>
     <!-- First Row: Search, Lifter Info, Lifter Info JSON (Stacked vertically in one column) -->
-    <div id="resultsContainer" class="col-xl-12 px-5"></div>
+    <div id="resultsContainer" class="col-12 d-flex justify-content-between">
+        <div id="searchContainer" class="col-md-2 px-1"></div>
+        <div id="dataContainer" class="col-md-10 px-1"></div>
+    </div>
 
     <!-- Second Row: Showdown on the left and Regional Rankings on the right -->
-    <div class="col-12 d-flex justify-content-between">
-        <div class="col-md-6 px-5">
+    <div id="extrasContainer" class="col-12 d-flex justify-content-between">
+        <div id="showdownContainer" class="col-md-6 px-5">
             <div th:replace="~{fragments/showdown :: showdown}"></div>
         </div>
-        <div class="col-md-6 px-5">
+        <div id="regionsContainer" class="col-md-6 px-5">
             <div th:replace="~{fragments/regional-rankings :: regional-rankings}"></div>
         </div>
     </div>
@@ -209,180 +34,93 @@
     <div class="col-12" style="height: 200px;"></div>
 
 </div>
-</div>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" th:src="@{/js/utils.js}"></script>
+<!--    // Card glow-->
+<!--    const delay = ms => new Promise(res => setTimeout(res, ms));-->
 
-<script th:inline="javascript">
-    // search boxes
-    function performSearch(searchBoxId, resultContainerId, endpoint) {
-        let query = document.getElementById(searchBoxId).value;
-        if (!query.trim()) return;
+<!--    document.getElementById('compare-button').onclick = async () => {-->
+<!--        const card = document.getElementById('showdown-card');-->
+<!--        card.classList.add('highlight');-->
+<!--        await delay(2800);-->
+<!--        card.classList.remove('highlight');-->
+<!--    };-->
+<!--    document.getElementById('regions-button').onclick = async () => {-->
+<!--        const card = document.getElementById('regions-card');-->
+<!--        card.classList.add('highlight');-->
+<!--        await delay(2800);-->
+<!--        card.classList.remove('highlight');-->
+<!--    };-->
 
-        fetch(`${endpoint}?query=${query}`)
-            .then(response => response.text())
-            .then(html => {
-            let container = document.getElementById(resultContainerId);
-            if (!container) {
-                return;
-            }
-
-            // Replace href links with onclick
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = html;
-
-            let resCard = tempDiv.getElementsByClassName('results-card')[0];
-
-            if (endpoint.toLowerCase().includes('showdown')) {
-                resCard.classList.remove('w-25');
-                resCard.classList.add('w-100');
-            }
-
-            const links = tempDiv.querySelectorAll('a');
-            links.forEach(link => {
-                // Get the href value and extract the part after the slash
-                const href = link.getAttribute('href');
-                const name = href.split('/')[1];  // Get everything after the slash
-
-                link.setAttribute('onclick', `populateInfo('${name}', '${resultContainerId}', '${endpoint}')`);
-                link.removeAttribute('href');  // Optionally remove the href attribute
-            });
-
-            container.innerHTML = tempDiv.innerHTML;
-        })
-            .catch(error => console.error('Error fetching search results:', error));
-    }
-
-    function populateInfo(name, resultContainerId, endpoint) {
-        fetch(`${endpoint}/lifter/${name}`)  // Fixed the template literal usage here
-            .then(response => response.text())
-            .then(html => {
-            let container = document.getElementById(resultContainerId);
-            if (!container) {
-                console.error("Container not found:", resultContainerId);
-                return;
-            }
-
-            // Replace href links with onclick
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = html;
-
-            var resCard = tempDiv.getElementsByClassName('results-card')[0];
-
-            if (endpoint.toLowerCase().includes('showdown')) {
-                resCard.classList.remove('w-25');
-                resCard.classList.add('w-100');
-                resCard.getElementsByTagName('table')[0].classList.add('table-sm');
-            } else (drawChart(name));
-
-            container.innerHTML = tempDiv.innerHTML;  // Fixed typo from innerHtml to innerHTML
-        })
-            .catch(error => console.error('Error fetching lifter info:', error));  // Fixed the error log typo
-    }
-
-    //Regional
-    document.addEventListener("DOMContentLoaded", function () {
-        const buttons = document.querySelectorAll(".button");
-        const butWraps = document.querySelectorAll(".button-wrapper");
-        const tables = document.querySelectorAll(".table-wrapper");
-
-        butWraps.forEach((butWrap, index) => {
-            butWrap.addEventListener("click", function () {
-                butWraps.forEach(btn => btn.classList.remove("active"));
-                butWraps.forEach(btn => btn.children[1].classList.remove("active"));
-                tables.forEach(tbl => tbl.classList.add("hidden"));
-
-                butWrap.classList.add("active");
-                butWrap.children[1].classList.add("active");
-                tables[index].classList.remove("hidden");
-            });
-        });
-    });
-
-    // Card glow
-    const delay = ms => new Promise(res => setTimeout(res, ms));
-
-    document.getElementById('compare-button').onclick = async () => {
-        const card = document.getElementById('showdown-card');
-        card.classList.add('highlight');
-        await delay(2800);
-        card.classList.remove('highlight');
-    };
-    document.getElementById('regions-button').onclick = async () => {
-        const card = document.getElementById('regions-card');
-        card.classList.add('highlight');
-        await delay(2800);
-        card.classList.remove('highlight');
-    };
-
-    // charts
-    function drawChart(name) {
-        fetch(`/api/json/scatter/${name}`)  // Replace with your actual endpoint
-            .then(response => response.json())   // Parse the JSON data from the response
-            .then(jsonData => {
-            // Create the chart after the data is fetched
-                const ctx = document.getElementById('chart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'scatter',
-                    data: {
-                        datasets: [{
-                            label: 'GLP Trends w/ BW', // Title of the chart
-                            data: jsonData.data, // Data points
-                            backgroundColor: 'purple', // Set the point color to purple
-                            borderColor: 'purple',
-                            borderWidth: 1,
-                            pointRadius: 5, // Size of the points
-                            pointHoverRadius: 7 // Hover effect size
-                        }]
-                    },
-                    options: {
-                        title: {
-                            display: true,
-                            text: 'GLP Trends w/ BW', // Chart Title
-                            fontSize: 18,
-                            fontColor: 'white' // Title text color
-                        },
-                        scales: {
-                            x: {
-                                type: 'linear', // Ensure that the x-axis is treated as a continuous scale
-                                position: 'bottom',
-                                title: {
-                                    display: true,
-                                    text: jsonData.labels.x, // x-axis label (Bodyweight)
-                                    fontColor: 'white' // Label color for x-axis
-                                },
-                                ticks: {
-                                    beginAtZero: false, // Disable starting from 0
-                                    fontColor: 'white' // Tick marks color
-                                }
-                            },
-                            y: {
-                                title: {
-                                    display: true,
-                                    text: jsonData.labels.y, // y-axis label (Goodlifts)
-                                    fontColor: 'white' // Label color for y-axis
-                                },
-                                ticks: {
-                                    fontColor: 'white' // Tick marks color
-                                }
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                labels: {
-                                    fontColor: 'white' // Legend text color
-                                }
-                            }
-                        }
-                    }
-                });
-            })
-                .catch(error => {
-                console.error('Error fetching data:', error);
-            });
-    };
-</script>
+<!--    // charts-->
+<!--    function drawChart(name) {-->
+<!--        fetch(`/api/json/scatter/${name}`)  // Replace with your actual endpoint-->
+<!--            .then(response => response.json())   // Parse the JSON data from the response-->
+<!--            .then(jsonData => {-->
+<!--            // Create the chart after the data is fetched-->
+<!--                const ctx = document.getElementById('chart').getContext('2d');-->
+<!--                new Chart(ctx, {-->
+<!--                    type: 'scatter',-->
+<!--                    data: {-->
+<!--                        datasets: [{-->
+<!--                            label: 'GLP Trends w/ BW', // Title of the chart-->
+<!--                            data: jsonData.data, // Data points-->
+<!--                            backgroundColor: 'purple', // Set the point color to purple-->
+<!--                            borderColor: 'purple',-->
+<!--                            borderWidth: 1,-->
+<!--                            pointRadius: 5, // Size of the points-->
+<!--                            pointHoverRadius: 7 // Hover effect size-->
+<!--                        }]-->
+<!--                    },-->
+<!--                    options: {-->
+<!--                        title: {-->
+<!--                            display: true,-->
+<!--                            text: 'GLP Trends w/ BW', // Chart Title-->
+<!--                            fontSize: 18,-->
+<!--                            fontColor: 'white' // Title text color-->
+<!--                        },-->
+<!--                        scales: {-->
+<!--                            x: {-->
+<!--                                type: 'linear', // Ensure that the x-axis is treated as a continuous scale-->
+<!--                                position: 'bottom',-->
+<!--                                title: {-->
+<!--                                    display: true,-->
+<!--                                    text: jsonData.labels.x, // x-axis label (Bodyweight)-->
+<!--                                    fontColor: 'white' // Label color for x-axis-->
+<!--                                },-->
+<!--                                ticks: {-->
+<!--                                    beginAtZero: false, // Disable starting from 0-->
+<!--                                    fontColor: 'white' // Tick marks color-->
+<!--                                }-->
+<!--                            },-->
+<!--                            y: {-->
+<!--                                title: {-->
+<!--                                    display: true,-->
+<!--                                    text: jsonData.labels.y, // y-axis label (Goodlifts)-->
+<!--                                    fontColor: 'white' // Label color for y-axis-->
+<!--                                },-->
+<!--                                ticks: {-->
+<!--                                    fontColor: 'white' // Tick marks color-->
+<!--                                }-->
+<!--                            }-->
+<!--                        },-->
+<!--                        plugins: {-->
+<!--                            legend: {-->
+<!--                                labels: {-->
+<!--                                    fontColor: 'white' // Legend text color-->
+<!--                                }-->
+<!--                            }-->
+<!--                        }-->
+<!--                    }-->
+<!--                });-->
+<!--            })-->
+<!--                .catch(error => {-->
+<!--                console.error('Error fetching data:', error);-->
+<!--            });-->
+<!--    };-->
+<!--</script>-->
 
 </body>
 </html>

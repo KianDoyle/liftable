@@ -2,9 +2,8 @@
 <nav class="navbar navbar-dark fixed-top" th:fragment="navbar">
     <div class="container-fluid">
         <div class="row w-100 align-items-center">
-            <!-- Left side: Logo and 'Liftable' text -->
             <div class="col-auto d-flex align-items-center">
-                <a th:href="@{~/web/home}"><img th:src="@{/Vector.png}" alt="Liftable Purple Logo"
+                <a th:href="@{~/web/home}"><img th:src="@{/logo.png}" alt="Liftable Purple Logo"
                                                 class="logo me-2"></a>
                 <a class="navbar-brand" th:href="@{~/web/home}">LIFTABLE</a>
                 <div class="navbar-brand mx-3" style="color: #501993">I</div>
@@ -13,12 +12,11 @@
                 <div id="regions-button" class="navbar-brand mx-3">REGIONS</div>
             </div>
 
-            <!-- Right side: Search form -->
             <div class="col-auto ms-auto">
-                <div class="d-flex search-bar">
-                    <input id="searchBox" class="form-control me-2" type="text" placeholder="Search..." required>
-                    <button class="btn btn-primary" type="button" onclick="performSearch('searchBox', 'resultsContainer', '/web/search')">Search</button>
-                </div>
+                <form id="searchBar" class="d-flex search-bar" action="javascript:search('navbarSearchBox', 'searchContainer', '/web/search')" >
+                    <input id="navbarSearchBox" class="form-control me-2" type="text" placeholder="Search..." tabindex="0" required>
+                    <button id="navbarSearchButton" class="btn btn-primary" type="submit" tabindex="0">Search</button>
+                </form>
             </div>
         </div>
     </div>

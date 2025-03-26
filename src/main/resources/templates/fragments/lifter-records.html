@@ -1,6 +1,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<div id="lifter-info" th:if="${records} != null" th:fragment="lifter-info-json"
-     class="results-card d-flex justify-content-center m-3 mt-1">
+<div id="lifter-info" th:fragment="lifter-records"
+     class="results-card d-flex justify-content-center m-3 mt-1 vh-50">
     <div class="table-wrapper w-100">
         <table class="p-auto m-auto w-100">
             <thead>
@@ -27,10 +27,10 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="record : ${records.getRecords()}">
+            <tr th:each="record : ${records}">
                 <td th:text="${record.getMeetName()}"></td>
                 <td th:text="${record.getMeetCountry()}"></td>
-                <td th:text="${record.getDate()}"></td>
+                <td th:text="${#temporals.format(record.getDate(), 'dd-MM-yyyy')}"></td>
                 <td th:text="${record.getEvent()}"></td>
                 <td th:text="${record.getEquipment()}"></td>
                 <td th:text="${record.getDivision()}"></td>
