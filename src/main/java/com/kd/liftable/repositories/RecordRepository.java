@@ -18,4 +18,17 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
                 "SELECT Name, Best3SquatKg, Best3BenchKg, Best3DeadliftKg, TotalKg, Goodlift FROM lifter_data WHERE Name = :name AND Equipment = :equip)" +
                 "AS grouped" , nativeQuery = true)
     List<Float[]> findLargestStats(@Param("name") String name, @Param("equip") String equip);
+
+    @Query(value = "SELECT DISTINCT Date, BodyweightKg, Best3SquatKg, Best3BenchKg, Best3DeadliftKg, TotalKg, Goodlift FROM lifter_data WHERE Name = :name ORDER BY Date ASC", nativeQuery = true)
+    List<Object[]> findStatsByNameDistinctDateOrderByDateAsc(@Param("name") String name);
+
+    @Query(value = "SELECT DISTINCT Date, BodyweightKg,Goodlift FROM lifter_data WHERE Name = :name AND Equipment = :equip AND Event = :event ORDER BY Date ASC", nativeQuery = true)
+    List<Object[]> findBWGLByNameDistinctDateOrderByDateAsc(@Param("name") String name, @Param("equip") String equip, @Param("event") String event);
+
+    @Query(value = "SELECT DISTINCT Date, Best3SquatKg, Best3BenchKg, Best3DeadliftKg FROM lifter_data WHERE Name = :name AND Equipment = :equip ORDER BY Date ASC", nativeQuery = true)
+    List<Object[]> findSBDByNameDistinctDateOrderByDateAsc(@Param("name") String name, @Param("equip") String equip);
+
+    @Query(value = "SELECT DISTINCT Date, TotalKg FROM lifter_data WHERE Name = :name AND Equipment = :equip AND Event = :event ORDER BY Date ASC", nativeQuery = true)
+    List<Object[]> findTotalByNameDistinctDateOrderByDateAsc(@Param("name") String name, @Param("equip") String equip, @Param("event") String event);
+
 }

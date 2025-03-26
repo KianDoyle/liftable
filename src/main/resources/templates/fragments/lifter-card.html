@@ -1,6 +1,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<div th:if="${lifter} != null" class="container d-flex justify-content-center" th:fragment="lifter-card">
-    <div class="results-card w-25">
+<div th:fragment="lifter-card" class="container d-flex justify-content-center">
+    <div class="results-card w-50">
         <h2 th:text="${lifter.getName() + ' ' + lifter.getSex()}"></h2>
         <h3>Personal Bests</h3>
 

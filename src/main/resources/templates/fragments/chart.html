@@ -1,0 +1,22 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<div th:fragment="chart">
+    <div class="results-card col m-1">
+        <canvas id="bw-gl-raw-chart" th:attr="data-chartdata=${chartData.get(0)}"></canvas>
+    </div>
+    <div class="results-card col m-1">
+        <canvas id="sbd-raw-chart" th:attr="data-chartdata=${chartData.get(1)}"></canvas>
+    </div>
+    <div class="results-card col m-1">
+        <canvas id="total-raw-chart" th:attr="data-chartdata=${chartData.get(2)}"></canvas>
+    </div>
+    <div class="results-card col m-1">
+        <canvas id="bw-gl-equip-chart" th:attr="data-chartdata=${chartData.get(3)}"></canvas>
+    </div>
+    <div class="results-card col m-1">
+        <canvas id="sbd-equip-chart" th:attr="data-chartdata=${chartData.get(4)}"></canvas>
+    </div>
+    <div class="results-card col m-1">
+        <canvas id="total-equip-chart" th:attr="data-chartdata=${chartData.get(5)}"></canvas>
+    </div>
+</div>
+</html>

@@ -1,5 +1,6 @@
 package com.kd.liftable.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kd.liftable.models.*;
 import com.kd.liftable.models.Record;
 import com.kd.liftable.services.OpenPowerliftingService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("web")
@@ -52,9 +54,15 @@ public class WebController {
     }
 
     @GetMapping("/showdown/{name}")
-    public String getShowdownLifter(@PathVariable String name, Model model) throws Exception {
+    public String getShowdownLifter(@PathVariable String name, Model model) {
         model.addAttribute("lifter", openPowerliftingService.fetchLifterShowdown(name).getLifterCard());
         return "fragments/lifter-card :: lifter-card";
     }
 
+    @GetMapping("/chart/{name}")
+    public String getChart(@PathVariable String name, Model model) {
+        ArrayList<String> allStatsStrings = openPowerliftingService.getLineChartData(name);
+        model.addAttribute("chartData", allStatsStrings);
+        return "fragments/chart :: chart";
+    }
 }

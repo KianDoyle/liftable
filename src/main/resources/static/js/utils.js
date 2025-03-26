@@ -1,3 +1,19 @@
+window.onload = () => {
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+    document.getElementById('compare-button').addEventListener('click', async () => {
+        const card = document.getElementById('showdown-card');
+        card.classList.add('highlight');
+        await delay(2800);
+        card.classList.remove('highlight');
+    });
+    document.getElementById('regions-button').addEventListener('click', async () => {
+        const card = document.getElementById('regions-card');
+        card.classList.add('highlight');
+        await delay(2800);
+        card.classList.remove('highlight');
+    });
+}
+
 function swapTable(index) {
     const buttons = document.querySelectorAll(".button-wrapper");
     const tables = document.querySelectorAll(".table-wrapper");
@@ -76,11 +92,39 @@ function populate(containerId, endpoint) {
             console.error("Container not found:", containerId);
             return;
         }
-        const tempDiv = document.createElement('div');
+        let tempDiv = document.createElement('div');
         tempDiv.innerHTML = html;
         container.innerHTML = tempDiv.innerHTML;
-    })
+        })
         .catch(error => console.error('Error fetching lifter info:', error));
+
+    if (endpoint.includes("lifter")) {
+        fetch('/web/chart/' + endpoint.split('/')[3])
+            .then(response => response.text())
+            .then(html => {
+                let chartContainer = document.getElementById('chartContainer');
+                if (!chartContainer) {
+                    console.error("Container not found:", 'chartContainer');
+                    return;
+                }
+                // Create a temporary container and assign its HTML.
+                let tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                chartContainer.innerHTML = tempDiv.children[0].innerHTML;
+
+                // Use querySelectorAll to select all canvas elements inside chartContainer.
+                let canvases = chartContainer.querySelectorAll('canvas');
+                canvases.forEach(canvas => {
+                    let resCardChartData = JSON.parse(canvas.dataset.chartdata);
+                    if (resCardChartData.xAxis.length === 0) {
+                        canvas.parentElement.classList.add('hidden');
+                        return; // Skip if there is no data.
+                    }
+                    drawChart(canvas.id, resCardChartData);
+                });
+            })
+            .catch(error => console.error('Error fetching chart:', error));
+    }
 }
 
 function search(searchBoxID, containerId, endpoint) {
