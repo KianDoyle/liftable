@@ -11,7 +11,7 @@
                     </thead>
                     <tbody>
                     <tr th:each="name : ${names}">
-                        <td><p th:text="${name.getName()}" th:onclick="populate('dataContainer', '[(${name.getLink()})]')"></p></td>
+                        <td><a th:text="${name.getName()}" th:href="${name.getLink()}"></a></td>
                     </tr>
                     </tbody>
                 </table>

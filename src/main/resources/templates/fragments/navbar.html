@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="row w-100 align-items-center">
             <div class="col-auto d-flex align-items-center">
-                <a th:href="@{~/web/home}"><img th:src="@{/logo.png}" alt="Liftable Purple Logo"
+                <a th:href="@{~/web}"><img th:src="@{/logo.png}" alt="Liftable Purple Logo"
                                                 class="logo me-2"></a>
                 <a class="navbar-brand" th:href="@{~/web/home}">LIFTABLE</a>
                 <div class="navbar-brand mx-3" style="color: #501993">I</div>
@@ -13,8 +13,8 @@
             </div>
 
             <div class="col-auto ms-auto">
-                <form id="searchBar" class="d-flex search-bar" action="javascript:search('navbarSearchBox', 'searchContainer', '/web/search')" >
-                    <input id="navbarSearchBox" class="form-control me-2" type="text" placeholder="Search..." tabindex="0" required>
+                <form id="searchBar" class="d-flex search-bar" th:action="@{~/web/search}" method="get">
+                    <input th:name="query" id="navbarSearchBox" class="form-control me-2" type="text" placeholder="Search..." tabindex="0" required>
                     <button id="navbarSearchButton" class="btn btn-primary" type="submit" tabindex="0">Search</button>
                 </form>
             </div>

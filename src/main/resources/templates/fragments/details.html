@@ -1,6 +1,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <div th:fragment="details">
-    <div id="lifter-info" class="results-card col d-flex flex-wrap ms-2 mt-0" th:data-name="${lifter.getName()}">
+    <div id="lifter-info" class="results-card col d-flex flex-wrap w-100" th:data-name="${lifter.getName()}">
         <div class="col-3">
             <h2 th:text="${lifter.getName() + ' ' + lifter.getSex()}"></h2>
             <table class="m-0 w-100">
