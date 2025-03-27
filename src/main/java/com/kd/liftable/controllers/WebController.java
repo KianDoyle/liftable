@@ -4,15 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kd.liftable.models.*;
 import com.kd.liftable.models.Record;
 import com.kd.liftable.services.OpenPowerliftingService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -44,6 +43,7 @@ public class WebController {
         LifterData lifterData = openPowerliftingService.fetchLifter(name);
         model.addAttribute("lifter", lifterData.getLifterCard());
         model.addAttribute("records", lifterData.getRecords());
+        model.addAttribute("filters", openPowerliftingService.getFilters());
         return "fragments/details :: details";
     }
 
@@ -59,10 +59,14 @@ public class WebController {
         return "fragments/lifter-card :: lifter-card";
     }
 
-    @GetMapping("/chart/{name}")
-    public String getChart(@PathVariable String name, Model model) {
-        ArrayList<String> allStatsStrings = openPowerliftingService.getLineChartData(name);
-        model.addAttribute("chartData", allStatsStrings);
-        return "fragments/chart :: chart";
+    @GetMapping("/chart-builder")
+    public String getChart() {
+        return "fragments/chart-builder :: chart-builder";
+    }
+
+    @PostMapping("/charts")
+    public ResponseEntity<Map<String, Object>> getChartData(@RequestBody Map<String, List<String>> filters) {
+        Map<String, Object> chartData = openPowerliftingService.getChartData(filters);
+        return ResponseEntity.ok(chartData);
     }
 }

@@ -95,35 +95,31 @@ function populate(containerId, endpoint) {
         let tempDiv = document.createElement('div');
         tempDiv.innerHTML = html;
         container.innerHTML = tempDiv.innerHTML;
+        if (endpoint.includes("lifter")) {
+            const observer = new MutationObserver((mutations, obs) => {
+                if (document.querySelector('.filter-option') && document.getElementById('applyFilters')) {
+                    chartFilters();
+                    obs.disconnect(); // Stop observing after running once
+                }
+            });
+            observer.observe(document.getElementById('chartContainer'), { childList: true, subtree: true });
+            fetch('/web/chart-builder')
+                .then(response => response.text())
+                .then(html => {
+                    let chartContainer = document.getElementById('chartContainer');
+                    if (!chartContainer) {
+                        console.error("Container not found:", 'chartContainer');
+                        return;
+                    }
+                    let tempDiv2 = document.createElement('div');
+                    tempDiv2.innerHTML = html;
+                    chartContainer.innerHTML = tempDiv2.innerHTML;
+                    chartFilters();
+                })
+                .catch(error => console.error('Error inserting chart-builder:', error));
+        }
         })
         .catch(error => console.error('Error fetching lifter info:', error));
-
-    if (endpoint.includes("lifter")) {
-        fetch('/web/chart/' + endpoint.split('/')[3])
-            .then(response => response.text())
-            .then(html => {
-            let chartContainer = document.getElementById('chartContainer');
-            if (!chartContainer) {
-                console.error("Container not found:", 'chartContainer');
-                return;
-            }
-            let tempDiv = document.createElement('div');
-            tempDiv.innerHTML = html;
-            chartContainer.innerHTML = tempDiv.children[0].innerHTML;
-
-            // Select all canvas elements inside chartContainer.
-            let canvases = chartContainer.querySelectorAll('canvas');
-            canvases.forEach(canvas => {
-                let chartData = JSON.parse(canvas.dataset.chartdata);
-                if (chartData.xAxis.length === 0) {
-                    canvas.parentElement.classList.add('hidden');
-                    return;
-                }
-                drawChart(canvas.id, chartData);
-            });
-        })
-            .catch(error => console.error('Error fetching chart:', error));
-    }
 }
 
 function search(searchBoxID, containerId, endpoint) {

@@ -152,12 +152,22 @@ public class Record {
     public Record() {
     }
 
+    public String getStringFieldValue(String fieldName) {
+        try {
+            Field field = this.getClass().getDeclaredField(fieldName); // Get field by name
+            field.setAccessible(true); // Allow access to private fields
+            return (String) field.get(this); // Return field value
+        } catch (NoSuchFieldException | IllegalAccessException | NullPointerException e) {
+            return "";
+        }
+    }
+
     public float getFloatFieldValue(String fieldName) {
         try {
             Field field = this.getClass().getDeclaredField(fieldName); // Get field by name
             field.setAccessible(true); // Allow access to private fields
             return (float) field.get(this); // Return field value
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+        } catch (NoSuchFieldException | IllegalAccessException | NullPointerException e) {
             return 0f;
         }
     }

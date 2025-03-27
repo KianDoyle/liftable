@@ -9,10 +9,11 @@ import java.util.List;
 
 @Repository
 public interface RecordRepository extends JpaRepository<Record, Long> {
-    List<Record> findAllByName(String name);
-
     @Query(value = "SELECT * FROM lifter_data WHERE Name = :name ORDER BY Date DESC", nativeQuery = true)
     List<Record> findAllByNameOrderedByDateDesc(@Param("name") String name);
+
+    @Query(value = "SELECT * FROM lifter_data WHERE Name = :name ORDER BY Date ASC", nativeQuery = true)
+    List<Record> findAllByNameOrderedByDateAsc(@Param("name") String name);
 
     @Query(value = "SELECT MAX(Best3SquatKg), MAX(Best3BenchKg), MAX(Best3DeadliftKg), MAX(TotalKg), MAX(Goodlift) FROM (" +
                 "SELECT Name, Best3SquatKg, Best3BenchKg, Best3DeadliftKg, TotalKg, Goodlift FROM lifter_data WHERE Name = :name AND Equipment = :equip)" +

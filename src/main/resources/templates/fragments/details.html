@@ -1,6 +1,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <div th:fragment="details">
-    <div id="lifter-info" class="results-card col d-flex flex-wrap ms-2 mt-0">
+    <div id="lifter-info" class="results-card col d-flex flex-wrap ms-2 mt-0" th:data-name="${lifter.getName()}">
         <div class="col-3">
             <h2 th:text="${lifter.getName() + ' ' + lifter.getSex()}"></h2>
             <table class="m-0 w-100">
@@ -76,6 +76,23 @@
                 </tbody>
             </table>
         </div>
+<!--        <div class="col-12">-->
+<!--            <div class="col-12 w-50 d-flex flex-wrap justify-content-center">-->
+<!--                <div class="col-12 text-center">-->
+<!--                    <h5>CHART FILTERS</h5>-->
+<!--                </div>-->
+<!--                <div class="col-12 d-flex flex-wrap" id="filterOptions" th:data-lifter-name="${lifter.getName()}">-->
+<!--                    <button th:each="filter : ${filters}"-->
+<!--                            th:text="${filter.toUpperCase()}"-->
+<!--                            th:data-column="${filter}"-->
+<!--                            type="button"-->
+<!--                            class="col-4 btn btn-outline-light filter-option"></button>-->
+<!--                </div>-->
+<!--                <div class="col-12">-->
+<!--                    <button type="button" class="btn btn-success" id="applyFilters">Apply</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
 </div>
 </html>

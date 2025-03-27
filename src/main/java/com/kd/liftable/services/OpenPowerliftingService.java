@@ -11,10 +11,8 @@ import org.springframework.stereotype.Service;
 import java.sql.Array;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.LinkedHashMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OpenPowerliftingService {
@@ -194,4 +192,89 @@ public class OpenPowerliftingService {
     }
 
 
+    public Map<String, Object> getChartData(Map<String, List<String>> filters) {
+        String name = filters.get("name").getFirst();
+        System.out.println("Name: " + name);
+        // Get all records for the person (already implemented)
+        List<Record> records = recordRepository.findAllByNameOrderedByDateAsc(name);
+
+        System.out.println(records.size() + " records found.");
+
+        // Order: bw, gl, squat, bench, deadlift, total, event, equipment
+        List<String> filterList = filters.get("filters").stream().filter(s -> !s.equals("n/a")).toList();
+        System.out.println("Filters: " + filterList);
+
+        String event = filterList.get(filterList.size() - 2);
+        String equipment = filterList.getLast();
+
+        System.out.println("Event: " + event);
+        System.out.println("Equipment: " + equipment);
+
+        // Filter the records based on user-selected filters
+        List<Record> filteredRecords = records.stream()
+                .filter(record -> record.getStringFieldValue("event").equals(event)
+                            && record.getStringFieldValue("equipment").equals(equipment))
+                .toList();
+
+        System.out.println(filteredRecords.size() + " filtered records found.");
+
+        // Build the data model for the chart
+        Map<String, Object> chartData = new HashMap<>();
+        List<String> xAxis = new ArrayList<>();
+        List<List<Float>> yAxisDatapoints = new ArrayList<>();
+        List<String> yAxisLabels = new ArrayList<>();
+
+        for (int i = 0; i < filterList.size() - 2; i++) {
+            yAxisLabels.add(filterList.get(i).toUpperCase());
+            yAxisDatapoints.add(new ArrayList<>());
+        }
+
+        // For example, iterate through filtered records to build arrays
+        for (Record rec : filteredRecords) {
+            xAxis.add(rec.getDate().toString());
+            for (int i = 0; i < filterList.size() - 2; i++) {
+                String filter = filterList.get(i);
+                List<Float> currDp = yAxisDatapoints.get(i);
+                currDp.add(rec.getFloatFieldValue(filter));
+                yAxisDatapoints.set(i, currDp);
+            }
+            System.out.println(yAxisDatapoints);
+            System.out.println(yAxisLabels);
+        }
+
+        for (int i = 0; i < yAxisDatapoints.size(); i++) {
+            chartData.put(yAxisLabels.get(i), yAxisDatapoints.get(i));
+        }
+
+        // Determine a chart title and axis labels based on the filters
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < yAxisLabels.size(); i++) {
+            if (i == yAxisLabels.size() - 1) {
+                sb.append(yAxisLabels.get(i)).append(" Progression Over Time");
+            } else {
+                sb.append(yAxisLabels.get(i)).append(", ");
+            }
+        }
+        String chartTitle = sb.toString();
+        String xAxisLabel = "Date";
+        chartData.put("chartTitle", chartTitle);
+        chartData.put("xAxis", xAxis);
+        chartData.put("xAxisLabel", xAxisLabel);
+        chartData.put("yAxisLabels", yAxisLabels);
+
+        return chartData;
+    }
+
+    public List<String> getFilters() {
+        List<String> filters = new ArrayList<>();
+        filters.add("bodyweightKg");
+        filters.add("goodlift");
+        filters.add("best3SquatKg");
+        filters.add("best3BenchKg");
+        filters.add("best3DeadliftKg");
+        filters.add("totalKg");
+        filters.add("event");
+        filters.add("equipment");
+        return filters;
+    }
 }
