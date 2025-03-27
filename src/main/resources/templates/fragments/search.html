@@ -2,12 +2,20 @@
 <div th:fragment="search">
     <div class="container d-flex justify-content-center w-100 p-0">
         <div class="results-card w-100 text-center">
-            <h3 class="text-center">Results</h3>
-            <ul class="list-group mt-3">
-                <li class="list-group-item" th:each="name : ${names}" th:onclick="populate('dataContainer', '[(${name.getLink()})]')">
-                    <a th:text="${name.getName()}"></a>
-                </li>
-            </ul>
+            <div class="table-wrapper justify-content-center">
+                <table class="table-xl w-100 text-center">
+                    <thead>
+                    <tr>
+                        <th><h2>Results</h2></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="name : ${names}">
+                        <td><p th:text="${name.getName()}" th:onclick="populate('dataContainer', '[(${name.getLink()})]')"></p></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

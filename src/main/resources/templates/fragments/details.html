@@ -1,10 +1,81 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <div th:fragment="details">
-    <div class="col-6 m-auto p-0">
-        <div th:replace="~{fragments/lifter-card :: lifter-card}"></div>
-    </div>
-    <div class="col-12 px-1"> <!-- Adjust column size -->
-        <div th:replace="~{fragments/lifter-records :: lifter-records}"></div>
+    <div id="lifter-info" class="results-card col d-flex flex-wrap ms-2 mt-0">
+        <div class="col-3">
+            <h2 th:text="${lifter.getName() + ' ' + lifter.getSex()}"></h2>
+            <table class="m-0 w-100">
+                <thead>
+                <tr>
+                    <th>Equip</th>
+                    <th>Squat</th>
+                    <th>Bench</th>
+                    <th>Deadlift</th>
+                    <th>Total</th>
+                    <th>GLP</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${lifter.getEquipment()}"></td>
+                    <td th:text="${lifter.getBest3SquatKg()}"></td>
+                    <td th:text="${lifter.getBest3BenchKg()}"></td>
+                    <td th:text="${lifter.getBest3DeadliftKg()}"></td>
+                    <td th:text="${lifter.getTotalKg()}"></td>
+                    <td th:text="${lifter.getGoodlift()}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="table-wrapper col-12 pe-3 m-0">
+            <table>
+                <thead>
+                <tr>
+                    <th>Meet Name</th>
+                    <th>Country</th>
+                    <th>Date</th>
+                    <th>Event</th>
+                    <th>Equipment</th>
+                    <th>Division</th>
+                    <th>Bodyweight (Kg)</th>
+                    <th>Squat 1 (Kg)</th>
+                    <th>Squat 2 (Kg)</th>
+                    <th>Squat 3 (Kg)</th>
+                    <th>Bench 1 (Kg)</th>
+                    <th>Bench 2 (Kg)</th>
+                    <th>Bench 3 (Kg)</th>
+                    <th>Deadlift 1 (Kg)</th>
+                    <th>Deadlift 2 (Kg)</th>
+                    <th>Deadlift 3 (Kg)</th>
+                    <th>Total (Kg)</th>
+                    <th>Place</th>
+                    <th>GLP</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="record : ${records}">
+                    <td th:text="${record.getMeetName()}"></td>
+                    <td th:text="${record.getMeetCountry()}"></td>
+                    <td th:text="${#temporals.format(record.getDate(), 'dd-MM-yyyy')}"></td>
+                    <td th:text="${record.getEvent()}"></td>
+                    <td th:text="${record.getEquipment()}"></td>
+                    <td th:text="${record.getDivision()}"></td>
+                    <td th:text="${record.getBodyweightKg()}"></td>
+                    <td th:text="${record.getSquat1Kg()}"></td>
+                    <td th:text="${record.getSquat2Kg()}"></td>
+                    <td th:text="${record.getSquat3Kg()}"></td>
+                    <td th:text="${record.getBench1Kg()}"></td>
+                    <td th:text="${record.getBench2Kg()}"></td>
+                    <td th:text="${record.getBench3Kg()}"></td>
+                    <td th:text="${record.getDeadlift1Kg()}"></td>
+                    <td th:text="${record.getDeadlift2Kg()}"></td>
+                    <td th:text="${record.getDeadlift3Kg()}"></td>
+                    <td th:text="${record.getTotalKg()}"></td>
+                    <td th:text="${record.getPlace()}"></td>
+                    <td th:text="${record.getGoodlift()}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 </html>

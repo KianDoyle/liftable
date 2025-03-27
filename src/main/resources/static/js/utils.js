@@ -102,27 +102,26 @@ function populate(containerId, endpoint) {
         fetch('/web/chart/' + endpoint.split('/')[3])
             .then(response => response.text())
             .then(html => {
-                let chartContainer = document.getElementById('chartContainer');
-                if (!chartContainer) {
-                    console.error("Container not found:", 'chartContainer');
+            let chartContainer = document.getElementById('chartContainer');
+            if (!chartContainer) {
+                console.error("Container not found:", 'chartContainer');
+                return;
+            }
+            let tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+            chartContainer.innerHTML = tempDiv.children[0].innerHTML;
+
+            // Select all canvas elements inside chartContainer.
+            let canvases = chartContainer.querySelectorAll('canvas');
+            canvases.forEach(canvas => {
+                let chartData = JSON.parse(canvas.dataset.chartdata);
+                if (chartData.xAxis.length === 0) {
+                    canvas.parentElement.classList.add('hidden');
                     return;
                 }
-                // Create a temporary container and assign its HTML.
-                let tempDiv = document.createElement('div');
-                tempDiv.innerHTML = html;
-                chartContainer.innerHTML = tempDiv.children[0].innerHTML;
-
-                // Use querySelectorAll to select all canvas elements inside chartContainer.
-                let canvases = chartContainer.querySelectorAll('canvas');
-                canvases.forEach(canvas => {
-                    let resCardChartData = JSON.parse(canvas.dataset.chartdata);
-                    if (resCardChartData.xAxis.length === 0) {
-                        canvas.parentElement.classList.add('hidden');
-                        return; // Skip if there is no data.
-                    }
-                    drawChart(canvas.id, resCardChartData);
-                });
-            })
+                drawChart(canvas.id, chartData);
+            });
+        })
             .catch(error => console.error('Error fetching chart:', error));
     }
 }
