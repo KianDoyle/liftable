@@ -1,7 +1,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <div th:fragment="chart-builder">
     <div class="col-12">
-        <div class="col-12 w-50 d-flex flex-wrap justify-content-center">
+        <div class="col-6 d-flex flex-wrap justify-content-center">
             <div class="col-12 text-center">
                 <h5>CHART FILTERS</h5>
             </div>
@@ -10,10 +10,10 @@
                         th:text="${filter.toUpperCase()}"
                         th:data-column="${filter}"
                         type="button"
-                        class="col-4 btn btn-outline-light filter-option"></button>
+                        class="col w-25 btn mx-1 mb-1 btn-outline-light filter-option"></button>
             </div>
             <div class="col-12">
-                <button type="button" class="btn btn-success" id="applyFilters">Apply</button>
+                <button type="submit" class="btn btn-success" id="applyFilters">Apply</button>
             </div>
         </div>
     </div>

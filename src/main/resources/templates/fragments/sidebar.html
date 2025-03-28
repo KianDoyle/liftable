@@ -1,0 +1,20 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<div id="sidebar" class="sidebar d-flex flex-column justify-content-start px-2" th:fragment="sidebar">
+    <div class="row">
+        <div class="col-12" style="height: 70px;"></div>
+    </div>
+    <div class="btn-spacer d-flex align-items-center">
+        <button class="btn icon-button nav-link justify-content-center" onclick="">
+            <img th:src="@{/search-icon.png}" alt="SEARCH">
+        </button>
+        <a th:href="@{~/web/home}">SEARCH</a>
+    </div>
+    <div style="flex-grow: 1;"></div>
+    <div class="btn-spacer d-flex align-items-center">
+        <button class="btn icon-button nav-link justify-content-center" onclick="">
+            <img th:src="@{/account-icon.png}" alt="ACCOUNT">
+        </button>
+        <a th:href="@{~/web/account}">ACCOUNT</a>
+    </div>
+</div>
+</html>

@@ -25,13 +25,26 @@ body:hover {
 
 .navbar {
     background-color: #0e0e10;
-    padding: 5px 0px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.main-content {
+    padding-top: 70px;
+    padding-left: 62px;
+    min-height: 100vh;
 }
 
 .navbar-brand {
     font-size: 1.5rem;
     font-weight: bold;
     color: #fff;
+}
+
+.logo {
+    width: 100px;
 }
 
 .search-bar {
@@ -55,6 +68,20 @@ body:hover {
 
 .btn-primary:hover {
     background-color: #772ce8;
+}
+
+.icon-button {
+    background-color: #0e0e10;
+    color: #fff;
+    border: none;
+    width: 46px;
+    padding: 0;
+    margin: 0;
+    border-radius: 100%;
+}
+
+.icon-button:hover {
+    background-color: #25252a;
 }
 
 .card, .card-body, .results-card {
@@ -102,9 +129,7 @@ thead {
     background-color: #34343e;
 }
 
-.logo {
-    width: 50px;
-}
+
 
 .button {
     background-color: #28282e;
