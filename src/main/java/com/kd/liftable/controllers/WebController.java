@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("web")
-@SessionAttributes({"leaderboards", "names", "lifter", "records", "filters"})
+@SessionAttributes({"leaderboards", "sd", "names", "lifter", "records", "filters"})
 public class WebController {
 
     private final OpenPowerliftingService openPowerliftingService;
@@ -29,6 +29,11 @@ public class WebController {
     @ModelAttribute("leaderboards")
     public LinkedHashMap<String, ArrayList<RegionRecord>> initializeLeaderboards() {
         return null; // Default empty list or logic to initialize if needed
+    }
+
+    @ModelAttribute("sd")
+    public boolean initializeShowdown() {
+        return false;
     }
 
     @ModelAttribute("names")
@@ -63,17 +68,20 @@ public class WebController {
                           @ModelAttribute("lifter") LifterCard lifter,
                           @ModelAttribute("records") ArrayList<Record> records,
                           @ModelAttribute("filters") List<String> filters,
+                          @ModelAttribute("sd") boolean sd,
                           Model model) {
-        leaderboards = openPowerliftingService.fetchTop10LiftersInEachRegion();
+        leaderboards = null;
         names = null;
         lifter = null;
         records = null;
         filters = null;
+        sd = false;
         model.addAttribute("leaderboards", leaderboards);
         model.addAttribute("names", names);
         model.addAttribute("lifter", lifter);
         model.addAttribute("records", records);
         model.addAttribute("filters", filters);
+        model.addAttribute("sd", sd);
         return "index";
     }
 
@@ -108,6 +116,52 @@ public class WebController {
         model.addAttribute("lifter", lifter);
         model.addAttribute("records", records);
         model.addAttribute("filters", filters);
+        return "index";
+    }
+
+    @GetMapping("/showdown")
+    public String getShowdown(@ModelAttribute ("leaderboards") LinkedHashMap<String, ArrayList<RegionRecord>> leaderboards,
+                              @ModelAttribute("names") ArrayList<Name> names,
+                              @ModelAttribute("lifter") LifterCard lifter,
+                              @ModelAttribute("records") ArrayList<Record> records,
+                              @ModelAttribute("filters") List<String> filters,
+                              @ModelAttribute("sd") boolean sd,
+                              Model model) {
+        sd = true;
+        leaderboards = null;
+        names = null;
+        lifter = null;
+        records = null;
+        filters = null;
+        model.addAttribute("leaderboards", leaderboards);
+        model.addAttribute("names", names);
+        model.addAttribute("lifter", lifter);
+        model.addAttribute("records", records);
+        model.addAttribute("filters", filters);
+        model.addAttribute("sd", sd);
+        return "index";
+    }
+
+    @GetMapping("/continent-rankings")
+    public String getContinentRankings(@ModelAttribute ("leaderboards") LinkedHashMap<String, ArrayList<RegionRecord>> leaderboards,
+                                       @ModelAttribute("names") ArrayList<Name> names,
+                                       @ModelAttribute("lifter") LifterCard lifter,
+                                       @ModelAttribute("records") ArrayList<Record> records,
+                                       @ModelAttribute("filters") List<String> filters,
+                                       @ModelAttribute("sd") boolean sd,
+                                       Model model) {
+        sd = false;
+        leaderboards = openPowerliftingService.fetchTop10LiftersInEachRegion();
+        names = null;
+        lifter = null;
+        records = null;
+        filters = null;
+        model.addAttribute("leaderboards", leaderboards);
+        model.addAttribute("names", names);
+        model.addAttribute("lifter", lifter);
+        model.addAttribute("records", records);
+        model.addAttribute("filters", filters);
+        model.addAttribute("sd", sd);
         return "index";
     }
 

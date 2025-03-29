@@ -3,18 +3,30 @@
     <div class="row">
         <div class="col-12" style="height: 70px;"></div>
     </div>
-    <div class="btn-spacer d-flex align-items-center">
+    <div class="btn-spacer d-flex align-items-center py-3">
         <button class="btn icon-button nav-link justify-content-center" onclick="">
             <img th:src="@{/search-icon.png}" alt="SEARCH">
         </button>
-        <a th:href="@{~/web/home}">SEARCH</a>
+        <a th:href="@{~/web/home}" class="ms-2">SEARCH</a>
+    </div>
+    <div class="btn-spacer d-flex align-items-center py-3">
+        <a class="btn icon-button nav-link justify-content-start" th:href="@{~/web/showdown}">
+            <img th:src="@{/showdown-icon.png}" alt="SHOWDOWN">
+        </a>
+        <a th:href="@{~/web/showdown}" class="ms-2">SHOWDOWN</a>
+    </div>
+    <div class="btn-spacer d-flex align-items-center py-3">
+        <a class="btn icon-button nav-link justify-content-start" th:href="@{~/web/continent-rankings}">
+            <img th:src="@{/continents-icon.png}" alt="CONTINENTS">
+        </a>
+        <a th:href="@{~/web/continent-rankings}" class="ms-2">CONTINENTS</a>
     </div>
     <div style="flex-grow: 1;"></div>
     <div class="btn-spacer d-flex align-items-center">
         <button class="btn icon-button nav-link justify-content-center" onclick="">
             <img th:src="@{/account-icon.png}" alt="ACCOUNT">
         </button>
-        <a th:href="@{~/web/account}">ACCOUNT</a>
+        <a th:href="@{~/web/account}" class="ms-2">ACCOUNT</a>
     </div>
 </div>
 </html>
