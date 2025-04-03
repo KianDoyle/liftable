@@ -1,61 +1,71 @@
 package com.kd.liftable.services;
 
-import com.fasterxml.jackson.databind.*;
+import com.kd.liftable.models.Record;
+import com.kd.liftable.repositories.RecordRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class ApiPowerliftingService {
 
-    public ApiPowerliftingService() {
+    private final RecordRepository recordRepository;
+
+    @Autowired
+    public ApiPowerliftingService(RecordRepository recordRepository) {
+        this.recordRepository = recordRepository;
     }
 
-    public JsonNode getLifterJson(String lifterName) {
-        return null;
+    public Page<Record> fetchAllLifters(int page, int size, String sortBy, Sort.Direction direction,
+                                        String name, String weightClass, String gender,
+                                        String ageClass, String federation) {
+        // Create pageable object with sort options
+        Pageable pageable = PageRequest.of(page, size,
+                direction == null ? Sort.Direction.DESC : direction,
+                sortBy != null ? sortBy : "goodlift");
+
+        // Search with filters
+        return recordRepository.searchLifters(name, weightClass, gender, ageClass, federation, pageable);
     }
 
-    public JsonNode getRegionalRankingsJSON(String region) {
-        return null;
+    public Page<Record> fetchLifter(String name, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "date");
+        return recordRepository.findAllByNameOrderedByDateDesc(name, pageable);
     }
 
-    //API
+    public Map<String, Object> fetchLifterStats(String name, String equipment) {
+        List<Object[]> stats = recordRepository.findLargestStats(name, equipment);
 
-//    public ObjectNode buildLabels(String x, String y) {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        ObjectNode labelsNode = objectMapper.createObjectNode();
-//        labelsNode.put("x", x);
-//        labelsNode.put("y", y);
-//
-//        return labelsNode;
-//    }
-//
-//    public ArrayNode buildScatterSet(ArrayList<PowerliftingRecord> records, String x, String y) throws Exception {
-//        ArrayNode xData = serviceUtils.convertArrayListToArrNode(
-//                serviceUtils.isolateColumn(records, x, "raw", "sbd"));
-//
-//        ArrayNode yData = serviceUtils.convertArrayListToArrNode(
-//                serviceUtils.isolateColumn(records, y, "raw", "sbd"));
-//
-//        return serviceUtils.zipDataArrays(xData, yData);
-//    }
-//
-//    public JsonNode getScatterChartData(String name) throws Exception {
-//        String csvData = fetchLifterDataRaw(name);
-//        String jsonString = serviceUtils.convertCsvToJsonString(csvData);
-//        ArrayList<PowerliftingRecord> records = serviceUtils.convertJsonStringToPlRecord(jsonString);
-//
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        ObjectNode chartData = objectMapper.createObjectNode();
-//        chartData.set("labels", buildLabels("BW", "GLP"));
-//        chartData.set("data", buildScatterSet(records, LiftMapper.BODYWEIGHT.getColName(), LiftMapper.GOODLIFT.getColName()));
-//        return chartData;
-//    }
-//
-//    //API PASS TO WEB
-//    public JsonNode getScatterChartFromData(ArrayList<PowerliftingRecord> records, String xl, String yl, String xd, String yd) throws Exception {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        ObjectNode chartData = objectMapper.createObjectNode();
-//        chartData.set("labels", buildLabels(xl, yl));
-//        chartData.set("data", buildScatterSet(records, xd, yd));
-//        return chartData;
-//    }
+        Map<String, Object> result = new HashMap<>();
+        if (!stats.isEmpty() && stats.get(0) != null) {
+            Object[] row = stats.get(0);
+            result.put("bestSquat", row[0]);
+            result.put("bestBench", row[1]);
+            result.put("bestDeadlift", row[2]);
+            result.put("bestTotal", row[3]);
+            result.put("bestGoodlift", row[4]);
+        }
+
+        return result;
+    }
+
+    public List<Record> fetchTopLifters() {
+        return recordRepository.findTopLiftersByGoodlift();
+    }
+
+    // Methods for filter options
+    public Map<String, List<String>> getFilterOptions() {
+        Map<String, List<String>> options = new HashMap<>();
+        options.put("weightClasses", recordRepository.findAllWeightClasses());
+        options.put("federations", recordRepository.findAllFederations());
+        options.put("ageClasses", recordRepository.findAllAgeClasses());
+        return options;
+    }
 }

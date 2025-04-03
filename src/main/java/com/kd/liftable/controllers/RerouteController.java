@@ -8,6 +8,6 @@ public class RerouteController {
 
     @GetMapping
     public String getHome() {
-        return "redirect:/web/home";
+        return "redirect:/api/lifters";
     }
 }

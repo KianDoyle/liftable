@@ -1,23 +1,25 @@
 package com.kd.liftable.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.lang.reflect.Field;
+import java.math.BigInteger;
 import java.time.LocalDate;
 
-@Setter
-@Getter
 @Entity
-@Table(name = "lifter_data", schema = "open_ipf_db")
+@Table(name = "lifter_data")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Record {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "Name")
     private String name;
@@ -32,7 +34,7 @@ public class Record {
     private String equipment;
 
     @Column(name = "Age")
-    private Integer age;
+    private Float age;
 
     @Column(name = "AgeClass")
     private String ageClass;
@@ -144,13 +146,6 @@ public class Record {
 
     @Column(name = "Sanctioned")
     private String sanctioned;
-
-    @Transient
-    private String link;
-
-    // Default constructor
-    public Record() {
-    }
 
     public String getStringFieldValue(String fieldName) {
         try {
