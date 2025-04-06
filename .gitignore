@@ -62,3 +62,5 @@ crash.log
 *.tfstate.d/
 
 Dockerfile
+
+cached/

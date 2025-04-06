@@ -1,6 +1,9 @@
 package com.kd.liftable.repositories;
 
 import com.kd.liftable.models.Record;
+import jakarta.persistence.EntityResult;
+import jakarta.persistence.FieldResult;
+import jakarta.persistence.SqlResultSetMapping;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -31,60 +35,39 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
             nativeQuery = true)
     List<Object[]> findLargestStats(@Param("name") String name, @Param("equip") String equip);
 
-    // Find top 20 lifters by goodlift score (corrected query)
-    @Query(value = "SELECT * FROM lifter_data " +
-            "WHERE goodlift IS NOT NULL AND event = 'SBD' AND equipment = 'Raw' ORDER BY goodlift DESC LIMIT 20",
+    // Search lifter with filters
+    @Query(value = "SELECT * FROM lifter_data WHERE name = :name",
             nativeQuery = true)
-    List<Record> findTopLiftersByGoodlift();
-
-    // Search lifters with filters (with pagination)
-    @Query(value = "SELECT * FROM lifter_data WHERE " +
-            "(:name IS NOT NULL OR LOWER(name) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
-            "(:weightClass IS NOT NULL OR weightclasskg = :weightClass) AND " +
-            "(:gender IS NOT NULL OR sex = :gender) AND " +
-            "(:ageClass IS NOT NULL OR ageclass = :ageClass) AND " +
-            "(:federation IS NOT NULL OR federation = :federation) AND " +
-            "goodlift IS NOT NULL ORDER BY goodlift DESC",
-            countQuery = "SELECT COUNT(*) FROM lifter_data WHERE " +
-                    "(:name IS NOT NULL OR LOWER(name) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
-                    "(:weightClass IS NOT NULL OR weightclasskg = :weightClass) AND " +
-                    "(:gender IS NOT NULL OR sex = :gender) AND " +
-                    "(:ageClass IS NOT NULL OR ageclass = :ageClass) AND " +
-                    "(:federation IS NOT NULL OR federation = :federation)",
-            nativeQuery = true)
-    Page<Record> searchLifters1(
+    Page<Record> searchLifterRecords(
             @Param("name") String name,
+            @Param("event") String event,
+            @Param("equipment") String equipment,
             @Param("weightClass") String weightClass,
-            @Param("gender") String gender,
             @Param("ageClass") String ageClass,
             @Param("federation") String federation,
             Pageable pageable);
 
-    @Query(value = "SELECT * "+
-            "FROM ( "+
-            "SELECT *, "+
-            "ROW_NUMBER() OVER (PARTITION BY name ORDER BY goodlift DESC) AS rn "+
-            "FROM lifter_data WHERE event = 'SBD' AND equipment = 'Raw' AND goodlift IS NOT NULL"+
-            ") ranked "+
-            "WHERE rn = 1 "+
-            "ORDER BY goodlift DESC ",
+    @Query(value = "SELECT * FROM "+
+                "(SELECT *, "+
+                "ROW_NUMBER() OVER (PARTITION BY name ORDER BY goodlift DESC) AS rn "+
+                "FROM lifter_data WHERE event = :event AND equipment = :equipment " +
+                "AND goodlift IS NOT NULL) " +
+            "ranked WHERE rn = 1",
             countQuery = "SELECT COUNT(*) "+
                     "FROM ( "+
                     "SELECT *, "+
                     "ROW_NUMBER() OVER (PARTITION BY name ORDER BY goodlift DESC) AS rn "+
-                    "FROM lifter_data WHERE event = 'SBD' AND equipment = 'Raw'"+
+                    "FROM lifter_data WHERE event = :event AND equipment = :equipment"+
                     ") ranked "+
                     "WHERE rn = 1 ",
             nativeQuery = true)
     Page<Record> searchLifters(
-            @Param("name") String name,
+            @Param("event") String event,
+            @Param("equipment") String equipment,
             @Param("weightClass") String weightClass,
-            @Param("gender") String gender,
             @Param("ageClass") String ageClass,
             @Param("federation") String federation,
             Pageable pageable);
-
-
 
     // Get unique values for filter dropdowns
     @Query(value = "SELECT DISTINCT weightclasskg FROM lifter_data WHERE weightclasskg IS NOT NULL ORDER BY weightclasskg",
@@ -98,4 +81,30 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     @Query(value = "SELECT DISTINCT ageclass FROM lifter_data WHERE ageclass IS NOT NULL ORDER BY ageclass",
             nativeQuery = true)
     List<String> findAllAgeClasses();
+
+    @Query(value = "SELECT DISTINCT ON (name) FROM lifter_data WHERE to_tsvector(name) @@ to_tsquery(:name)", nativeQuery = true)
+    ArrayList<Record> searchLifterNames(String name);
+
+    @Query(value = "SELECT DISTINCT ON (name) name FROM lifter_data ORDER BY name", nativeQuery = true)
+    ArrayList<String> findDistinctNames();
+
+    @Query(value = "SELECT * FROM "+
+            "(SELECT *, "+
+            "ROW_NUMBER() OVER (PARTITION BY name ORDER BY goodlift DESC) AS rn "+
+            "FROM lifter_data WHERE event = :event AND equipment = :equipment " +
+            "AND goodlift IS NOT NULL) " +
+            "ranked WHERE rn = 1", nativeQuery = true)
+    List<Record> findCachableLifters(@Param("event") String event, @Param("equipment") String equipment);
+
+    @Query(value = "SELECT * FROM lifter_data WHERE event = 'SBD' AND equipment = 'Raw' AND goodlift IS NOT NULL ORDER BY goodlift DESC", nativeQuery = true)
+    List<Record> findAllSBDRawOrderedByGoodlift();
+
+    @Query(value = "SELECT * FROM lifter_data WHERE event = 'SBD' AND equipment = 'Single-ply' AND goodlift IS NOT NULL ORDER BY goodlift DESC", nativeQuery = true)
+    List<Record> findAllSBDSinglePlyOrderedByGoodlift();
+
+    @Query(value = "SELECT * FROM lifter_data WHERE event = 'B' AND equipment = 'Raw' AND goodlift IS NOT NULL ORDER BY goodlift DESC", nativeQuery = true)
+    List<Record> findAllBRawOrderedByGoodlift();
+
+    @Query(value = "SELECT * FROM lifter_data WHERE event = 'B' AND equipment = 'Single-ply' AND goodlift IS NOT NULL ORDER BY goodlift DESC", nativeQuery = true)
+    List<Record> findAllBSinglePlyOrderedByGoodlift();
 }
